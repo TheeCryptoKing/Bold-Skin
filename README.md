@@ -1,4 +1,5 @@
 # Bold-Skin
+Eccomerce For Concious and Sustainable Men's BeautyCare
 
 # How to run
 Honcho coming soon !
@@ -14,14 +15,16 @@ Honcho coming soon !
 A Men's Skincare Line, creating products for all shade of Skin and all types of Men. Paving the way to Sustainable, Re-useable recycled, Cruelty-free and Affordable products. 
 
 # User Stories
-Users can scroll website for all pages and products
-Users need to Sign in/Signup and buy for products
-Users once Signed up will input all information in Form
-Users once Signed in can  buy products and add to cart
-Users can view order details cancel and edit order
-Users can view order history 
-Users can view company stories and company guides to maintain beauty and skin, as well as reading about vegan, cruelty-free formulas that are affordable for personal care, clean & naturally derived and also contained in recycled products, and for Men of all backgrounds
-
+<p>
+Users can scroll website for all pages and products<br>
+Users need to Sign in/Signup and buy for products<br>
+Users once Signed up will input all information in Form<br>
+Users once Signed in can  buy products and add to cart<br>
+Users can view order details cancel and edit order<br>
+Users can view order history<br>
+Users can view company stories and company guides to maintain beauty and skin, as well as reading about vegan, cruelty-free formulas that are affordable for personal care, clean & naturally derived and also contained in recycled products, and for Men of all backgrounds<br>
+</p>
+  
 # Stretch Goals
 3d generated AI avatar 
 side profile Nav 
