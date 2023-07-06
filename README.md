@@ -20,8 +20,8 @@ Users need to Sign in/Signup and buy for products<br>
 Users once Signed up will input all information in Form<br>
 Users once Signed in can  buy products and add to cart<br>
 Users can view order details cancel and edit order<br>
-Users can view order history<<br>
-  Users can view company stories and company guides to maintain beauty and skin, as well as reading about vegan, cruelty-free formulas that are affordable for personal care, clean & naturally derived and also contained in recycled products, and for Men of all backgrounds<br>
+Users can view order history<br>
+Users can view company stories and company guides to maintain beauty and skin, as well as reading about vegan, cruelty-free formulas that are affordable for personal care, clean & naturally derived and also contained in recycled products, and for Men of all backgrounds<br>
 </p>
   
 # Stretch Goals
