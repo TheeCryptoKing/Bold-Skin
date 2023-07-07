@@ -24,20 +24,20 @@ addresses <br>
 - Develop Backend <br>
 MVP Status: W.I.P.<br>
 <ol>
-<li>Create Models with serialize rules, Validation, Regex if you want Properly</li>
+<li>Create Models with serialize rules, Validation, Regex if you want **Properly</li>
 <li>Create Seed Data(Fix any Logic errors)</li>
 <li>Create All Api Routes needed</li>
 <li>Enable Flask Login(troubeshoot)</li>
 <li>Use .csv files or PICKL (or both)</li>
 <li>Have All API routes working and retrieveing formatted data before moving foward</li>
-<li>Punch in Faker Data for Tables for what we don't have</li>
+<li>Punch in Faker/Placeholder Data for Tables for what we don't have</li>
 <li>hash Passwors except main admin</li>
 </ol>
 
 - Develop Frontend grid and base style(HTML grid)<br>
 MVP Status: W.I.P.<br>
 <ol>
-<li>Practice Flexgrid and Flex</li>
+<li>Practice Flexgrid and Flex and slight padding around</li>
 <li>Enable Yup and Formik</li>
 <li>Try to do in basic CSS, choose 2 different UI library(TailwindCSS & BootStrapCss(install most likely))</li>
 <li>Pracitce JSX and scripts</li>
@@ -71,4 +71,4 @@ Advanced Status: Start after MVP<br>
 
 - Kwame Log<br>
 Creating Tables<br> 
-break down config.py<br>
+All base data created, Relationships next<br>

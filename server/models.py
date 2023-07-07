@@ -31,15 +31,14 @@ class User(db.Model, SerializerMixin, UserMixin):
     
     ######################## FK
     # role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    
     #################### Relationships 
     # Urole = dbrelationship("Role", backref="user_role")
-    # Uorders = db.relationship("Order", back_populates='user')
-    # Ucart = db.relationship("Cart", back_populates='user')
-    # Upayments = db.relationship("Payment", back_populates='user')
+    Uorders = db.relationship("Order", back_populates='user')
+    Ucart = db.relationship("Cart", back_populates='user')
+    Upayments = db.relationship("Payment", back_populates='user')
     # Ureviews = db.relationship("Review", back_populates='user')
     # Ucomments = db.relationship("Comment", back_populates='user')
-    # Uaddresses = db.relationship("Address", back_populates='user')
+    Uaddresses = db.relationship("Address", back_populates='user')
     ############ Validation & Seriaization
     # serialize_rules
     # @validations('')
@@ -58,13 +57,11 @@ class Product(db.Model, SerializerMixin):
     ingredients = db.Column(db.Text)
     ####################### DateTime Specfics
     ####################### FK
-    # category_id = db.Column(db.Integer, db.ForeignKey('category.id')) 
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id')) 
     ########################### Relationships 
-    # Backref = automatically adds a new attribute to the target table's model, which provides access to related objects from the source table. 
-    # category = db.relationship("Product", backref="product_category")
-    # cartItems =  db.relationship("CartItem", back_populates="product")
+    cartItems =  db.relationship("CartItem", back_populates="product")
     # Prod_reviews = db.relationship("Review", back_populates="product")
-    # order_items = db.relationship("OrderItem", back_populates="product")
+    order_items = db.relationship("OrderItem", back_populates="product")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -75,6 +72,8 @@ class Category(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     categories = db.Column(db.String)
     ####################### Relationships
+    # Backref = automatically adds a new attribute to the target table's model, which provides access to related objects from the source table. 
+    Prod_category = db.relationship("Product", backref="category")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -89,11 +88,11 @@ class Order(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     ####################### FK
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ########################### Relationships
-    # user = db.relationship("User", back_populates="Uorders")
-    # order_items = db.relationship("OrderItems", back_populates="orders")
-    # status = db.relationship("Order_Status", backref="orderStatus")
+    user = db.relationship("User", back_populates="Uorders")
+    order_items = db.relationship("OrderItems", back_populates="orders")
+    status = db.relationship("OrderStatus", backref="order_status")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -107,11 +106,11 @@ class OrderItems(db.Model, SerializerMixin):
     ####################### DateTime Specfics
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     ####################### FK
-    # order_id = db.Column(db.Integer, db.ForeignKey('orders.id')) 
-    # product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id')) 
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     ####################### Relationships
-    # orders = db.relationship("Order", back_populates="order_items")
-    # product = db.relationship("Product", back_populates="order_items")
+    orders = db.relationship("Order", back_populates="order_items")
+    product = db.relationship("Product", back_populates="order_items")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -134,10 +133,10 @@ class Cart(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     ####################### DateTime Specfics
     ####################### FK
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ########################### Relationships
-    # user = db.relationship("User", back_populates='Ucart')
-    # cartItems = db.relationship("CartItem", back_populates='cartstuff')
+    user = db.relationship("User", back_populates='Ucart')
+    cartItems = db.relationship("CartItem", back_populates='cart')
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -150,11 +149,11 @@ class CartItem(db.Model, SerializerMixin):
     cart_quantity = db.Column(db.Integer)
     ####################### DateTime Specfics
     ####################### FK
-    # cart_id = = db.Column(db.Integer, db.ForeignKey('cartstuff.id')) 
-    # product_id = = db.Column(db.Integer, db.ForeignKey('products.id'))
+    cart_id = db.Column(db.Integer, db.ForeignKey('cartstuff.id')) 
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     ########################### Relationships
-    # cart = db.relationship("Cart", back_populates="cart_items")
-    # product = db.relationhship("Product", back_populates="cart_items")
+    cart = db.relationship("Cart", back_populates="cartItems")
+    product = db.relationship("Product", back_populates="cartItems")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -174,9 +173,9 @@ class Payment(db.Model, SerializerMixin):
     ####################### DateTime Specfics
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     ####################### FK
-    # user_id = db.Column("User",db.ForeignKey('users.id'))
+    user_id = db.Column("User",db.ForeignKey('users.id'))
     ####################### Relationships
-    # user = db.relationship("User", back_populates='Upayments')
+    user = db.relationship("User", back_populates='Upayments')
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -231,9 +230,9 @@ class Address(db.Model, SerializerMixin):
     addess_type_of = db.Column(db.String, nullable=False)
     ####################### DateTime Specfics
     ####################### FK
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     ####################### Relationships
-    # user = db.relationship("User", back_populates="Uaddresses")
+    user = db.relationship("User", back_populates="Uaddresses")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
