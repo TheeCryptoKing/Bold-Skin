@@ -22,23 +22,24 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     
-    ################################ DateTime Specfics
+    ############################# DateTime Specfics
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    ########################### FK
+    ######################## FK
     # role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     
-    ########################### Relationships 
+    #################### Relationships 
     # Uorders = db.relationship("Order", backref='user_order')
     # Ucart = db.relationship("Cart", backref='user_cart')
     # Upayment = db.relationship("Payment", backref='user_payment')
     # Ureview = db.relationship("Review", backref='user_reviews')
     # Ucomments = db.relationship("Comment", backref='user_comments')
     # Uaddresses = db.relationship("Address", backref='user_addresses')
-    ########################### Validation & Seriaization
-    
-    
+    ############ Validation & Seriaization
+    # serialize_rules
+    # @validations('')
+
 
 class Product(db.Model, SerializerMixin):
     __tablename__ = 'products'

@@ -34,7 +34,7 @@ Can leave reviews and comments on reviews
 Admin access for certain features
 
 # Models
-<img src="./assets/Db.schema.png">
+<img src="./assets/ReadmeImages/Db.schema.png">
 
 # Api Routes
 
@@ -71,7 +71,7 @@ Admin access for certain features
 
 
 # React Tree
-<img src="./assets/React_Tree.png">
+<img src="./assets/ReadmeImages/React_Tree.png">
 
 # Client Routes
 | Client Route                      | Component         |
@@ -92,8 +92,8 @@ Admin access for certain features
 | /profile/{user_id}/cart           | Cart.jsx          |
 
 # WireFrame
-<img src="./assets/Home_Wireframe.png">
-<img src="./assets/Product_Wireframe.png">
-<img src="./assets/Shop_Wireframe.png">
-<img src="./assets/Profile_Wireframe.png">
-<img src="./assets/Cart_Wireframe.png">
+<img src="./assets/ReadmeImages/Home_Wireframe.png">
+<img src="./assets/ReadmeImages/Product_Wireframe.png">
+<img src="./assets/ReadmeImages/Shop_Wireframe.png">
+<img src="./assets/ReadmeImages/Profile_Wireframe.png">
+<img src="./assets/ReadmeImages/Cart_Wireframe.png">
