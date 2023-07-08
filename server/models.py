@@ -13,7 +13,7 @@ import uuid
 import re
 
 ############################### Models #######################
-# flask db revision --autogenerate -m 'message'
+# flask db revision --autogenerate -m 'updating Tables'
 # flask db upgrade head 
 
 
@@ -48,22 +48,25 @@ class Product(db.Model, SerializerMixin):
     __tablename__ = 'products'
     ######################## Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    p_name = db.Column(db.String, nullable=False)
-    p_description = db.Column(db.Text, nullable=False)
-    p_price = db.Column(db.Integer, nullable=False)
-    p_image = db.Column(db.String, nullable=False)
-    p_image_2 = db.Column(db.String, nullable=True)
-    p_background = db.Column(db.String, nullable=True)
+    name = db.Column(db.String, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=50)
+    e_pitch = db.Column(db.String)
+    description = db.Column(db.Text, nullable=False)
+    image_1 = db.Column(db.String, nullable=False)
+    image_2 = db.Column(db.String, nullable=True)
+    background = db.Column(db.String, nullable=True)
+    application = db.Column(db.String)
     ingredients = db.Column(db.Text)
     storage = db.Column(db.String)
+    
     ####################### DateTime Specfics
     ####################### FK
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id')) 
     ########################### Relationships 
     cartItems =  db.relationship("CartItem", back_populates="product")
     # Prod_reviews = db.relationship("Review", back_populates="product")
-    order_items = db.relationship("OrderItem", back_populates="product")
+    order_items = db.relationship("OrderItems", back_populates="product")
     ######################## Validation & Serialization
     # serialize_rules
     # @validations('')
@@ -72,7 +75,7 @@ class Category(db.Model, SerializerMixin):
     __tablename__ = 'categories'
     ######################## Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    categories = db.Column(db.String)
+    name = db.Column(db.String)
     ####################### Relationships
     # Backref = automatically adds a new attribute to the target table's model, which provides access to related objects from the source table. 
     Prod_category = db.relationship("Product", backref="category")
@@ -91,6 +94,7 @@ class Order(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     ####################### FK
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    status_id = db.Column(db.Integer, db.ForeignKey("order_status.id"))
     ########################### Relationships
     user = db.relationship("User", back_populates="Uorders")
     order_items = db.relationship("OrderItems", back_populates="orders")

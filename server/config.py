@@ -94,6 +94,5 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 bcrypt = Bcrypt(app)
-
 api = Api(app)
 CORS(app)
