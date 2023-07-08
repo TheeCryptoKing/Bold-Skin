@@ -1,16 +1,16 @@
 ########################### imports ######################
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, UniqueConstraint, ForeignKey
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import validates
 from flask_login import UserMixin, LoginManager
-# from config import db, bcrypt, ma
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
+from collections import OrderedDict
+from config import db, bcrypt
 import datetime
 import uuid
 import re
-from config import db, bcrypt
 
 ############################### Models #######################
 # flask db revision --autogenerate -m 'message'
@@ -25,6 +25,7 @@ class User(db.Model, SerializerMixin, UserMixin):
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
+    # wishlists(Carts Table, ncan be renamed for lists)
     ############################# DateTime Specfics
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -55,6 +56,7 @@ class Product(db.Model, SerializerMixin):
     p_background = db.Column(db.String, nullable=True)
     quantity = db.Column(db.Integer, nullable=False, default=50)
     ingredients = db.Column(db.Text)
+    storage = db.Column(db.String)
     ####################### DateTime Specfics
     ####################### FK
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id')) 
