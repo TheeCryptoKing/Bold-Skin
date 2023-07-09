@@ -77,10 +77,23 @@ Advanced Status: Start after MVP<br>
 - Kwame Log<br>
 Creating Tables<br> 
 All base data created, Relationships next<br>
-Populated categories and products, Need to write serializers, validations, and login parameters, and API routes. <br>
+Populated categories, products, Need to write serializers, validations, flasklogin parameters, API routes, bcrypt, and password hash  <br>
 
 
 <!-- ######################## Bold-Skin Product's  ######
+
+key : value pair for icons
+
+bootstrap jumbotron & install & link bootstrap in app.jsx
+
+Product Intiative Column, with intiatives
+fetch data and .split string at commas and do comparison of the string value 
+set value equal to icon image
+In frontend use <p> for image and post text next to it. Flex box 
+write function of front end to add icon
+key = intiative
+value = 
+
 
 Details: 
 Skin: vitamin D, for Vitamin E. For all skin types, including sensitive skin. Clean, vegan, gluten-free , earth-conscious, & sustainable.
