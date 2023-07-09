@@ -77,6 +77,7 @@ Advanced Status: Start after MVP<br>
 - Kwame Log<br>
 Creating Tables<br> 
 All base data created, Relationships next<br>
+Populated categories and products, Need to write serializers, validations, and login parameters, and API routes. <br>
 
 
 <!-- ######################## Bold-Skin Product's  ######
