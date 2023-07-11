@@ -53,6 +53,7 @@ from models import (
 # import ipdb
 from datetime import timezone, timedelta, datetime
 import traceback
+import json
 
 migrate = Migrate(app, db)
 login_manager = LoginManager()
@@ -76,8 +77,8 @@ class Signup(Resource):
         )
         new_user.password_hash = data['password']
         # Create Cart 
-        # new_cart = Cart()
-        # new_user.Ucart = new_cart
+        new_cart = Cart()
+        new_user.cart = new_cart
         # Create Role & find another method
         # new_role = Role(name='Regular')
         # new_user.Urole = new_role
@@ -86,10 +87,7 @@ class Signup(Resource):
         # Need & define a table 
         
         # Commit changes
-        db.session.add(
-            new_user,
-            # new_role,
-            )
+        db.session.add(new_user)
         db.session.commit()
         login_user(new_user, remember=True)
         return new_user.to_dict(), 201
@@ -190,483 +188,568 @@ class Users(Resource):
 api.add_resource(Users, '/users')
 # Fully fuctional
 
-# class UserOrders(Resource):
-#     @login_required
-#     def get(self):
-#         try:
-#             user_id = current_user.id
-#             orders = Order.query.filter_by(user_id=user_id).all()
-#             order_history = []
-#             for order in orders:
-#                 order_status = order.status.status if order.status else None
-#                 order_history.append({
-#                     "order_id": order.id,
-#                     "order_total": order.order_total,
-#                     "status": order_status,
-#                     "created": order.created_at.isoformat() if order.created_at else None
-#                 })
-#         except Exception as e:
-#             traceback.print_exc()
-#             return {"error" : "Error while fetching order history", "message": str(e)}, 500
+class UserOrders(Resource):
+    @login_required
+    def get(self):
+        try:
+            user_id = current_user.id
+            orders = Order.query.filter_by(user_id=user_id).all()
+            order_history = []
+            for order in orders:
+                order_status = order.status.status if order.status else None
+                order_history.append({
+                    "order_id": order.id,
+                    "order_total": order.order_total,
+                    "status": order_status,
+                    "created": order.created_at.isoformat() if order.created_at else None
+                })
+        except Exception as e:
+            traceback.print_exc()
+            return {"error" : "Error while fetching order history", "message": str(e)}, 500
         
-# api.add_resource(UserOrders, '/user/orders')
+api.add_resource(UserOrders, '/user/orders')
+# Working
 
-# class UserOrdersByID(Resource):
-#     @login_required
-#     def get(self, order_id):
-#         try:
-#             user_id = current_user.id
-#             order = Order.query.filter_by(id=order_id, user_id=user_id).first()
-#             if order:
-#                 # Check with Current order table
-#                 order_items = [
-#                     {
-#                     "product_id": item.product_id,
-#                     "product_name": item.product.name,
-#                     "num_of_items": item.num_of_items,
-#                     "items_price": item.items_price
-#                     }
-#                     for item in order.order_items
-#                 ]
-#                 order_info = {
-#                     "order_id": order.id,
-#                     "order_total": order.order_total,
-#                     "order_items": order_items
-#                 }
-#                 return order_info, 200
-#             else:
-#                 return {"error": "Order not found"}, 404
-#         except:
-#             return {"error": "Error occured Fetching order data"}, 500
+class UserOrdersByID(Resource):
+    @login_required
+    def get(self, order_id):
+        try:
+            user_id = current_user.id
+            order = Order.query.filter_by(id=order_id, user_id=user_id).first()
+            if order:
+                # Check with Current order table
+                order_items = [
+                    {
+                    "product_id": item.product_id,
+                    "product_name": item.product.name,
+                    "num_of_items": item.num_of_items,
+                    "items_price": item.items_price
+                    }
+                    for item in order.order_items
+                ]
+                order_info = {
+                    "order_id": order.id,
+                    "order_total": order.order_total,
+                    "order_items": order_items
+                }
+                return order_info, 200
+            else:
+                return {"error": "Order not found"}, 404
+        except:
+            return {"error": "Error occured Fetching order data"}, 500
         
-#     @login_required
-#     def delete(self, order_id):
-#             try:
-#                 user_id = current_user.id
-#                 order = Order.query.filter_by(id=order_id, user_id=user_id).first()
-#                 if order:
-#                     db.session.delete(order)
-#                     db.session.commit()
-#                     return {}, 204
-#                 else:
-#                     return {"Error": "Order not found"}, 404
-#             except:
-#                 return  {"Error": "Error with cancellation of current order"}, 500
-# api.add_resource(UserOrdersByID, '/user/orders/<int:order_id>')
+    @login_required
+    def delete(self, order_id):
+            try:
+                user_id = current_user.id
+                order = Order.query.filter_by(id=order_id, user_id=user_id).first()
+                if order:
+                    db.session.delete(order)
+                    db.session.commit()
+                    return {}, 204
+                else:
+                    return {"Error": "Order not found"}, 404
+            except:
+                return  {"Error": "Error with cancellation of current order"}, 500
+# Need orders to tests
+api.add_resource(UserOrdersByID, '/user/orders/<int:order_id>')
 
-# class UserPayments(Resource):
-#     @login_required
-#     def get(self, user_id):
-#         try:
-#             u_payments = Payment.query.filter_by(user_id=user_id).all()
-#             if u_payments:
-#                 payment_info = []
-#                 for payment in u_payments:
-#                     payment_info.append({
-#                         "id": payment.id,
-#                         "card_number": payment.card_number,
-#                         "cardholder_name": payment.cardholder_name,
-#                         "expiration_month": payment.expiration_month,
-#                         "expiration_year": payment.expiration_year,
-#                         "cvv": payment.cvv
-#                     })
-#                 return payment_info, 200
-#             else:
-#                 return {"error": "Payment details not found"}, 404
-#         except:
-#             return {"error": "An error occurred while fetching the payment details"}, 500
+class UserPayments(Resource):
+    @login_required
+    def get(self, user_id):
+        try:
+            u_payments = Payment.query.filter_by(user_id=user_id).all()
+            if u_payments:
+                payment_info = []
+                for payment in u_payments:
+                    payment_info.append({
+                        "id": payment.id,
+                        "card_number": payment.card_number,
+                        "cardholder_name": payment.cardholder_name,
+                        "expiration_month": payment.expiration_month,
+                        "expiration_year": payment.expiration_year,
+                        "cvv": payment.cvv
+                    })
+                return payment_info, 200
+            else:
+                return {"error": "Payment details not found"}, 404
+        except:
+            return {"error": "An error occurred while fetching the payment details"}, 500
 
-#     @login_required
-#     def post(self, user_id):
-#         try:
-#             data = request.get_json()
-#             card_number = data.get("card_number")
-#             cardholder_name = data.get("cardholder_name")
-#             expiration_month = data.get("expiration_month")
-#             expiration_year = data.get("expiration_year")
-#             cvv = data.get("cvv")
+    @login_required
+    def post(self, user_id):
+        try:
+            data = request.get_json()
+            card_number = data.get("card_number")
+            cardholder_name = data.get("cardholder_name")
+            expiration_month = data.get("expiration_month")
+            expiration_year = data.get("expiration_year")
+            cvv = data.get("cvv")
+            if not card_number or not cardholder_name or not expiration_month or not expiration_year or not cvv:
+                return {"Error": "Payment details required"}, 400
+            user_payment = Payment(
+                user_id=user_id,
+                card_number=card_number,
+                cardholder_name=cardholder_name,
+                expiration_month=expiration_month,
+                expiration_year=expiration_year,
+                cvv=cvv
+            )
+            db.session.add(user_payment)
+            db.session.commit()
+            new_payment_info = {
+                "id": user_payment.id,
+                "card_number": user_payment.card_number,
+                "cardholder_name": user_payment.cardholder_name,
+                "expiration_month": user_payment.expiration_month,
+                "expiration_year": user_payment.expiration_year,
+                "cvv": user_payment.cvv
+            }
+            return new_payment_info, 201
+        except Exception as e:
+            traceback.print_exc()
+            return {"Error": "Error encountered while adding the payment details", "message": str(e)}, 500
 
-#             if not card_number or not cardholder_name or not expiration_month or not expiration_year or not cvv:
-#                 return {"Error": "Payment details required"}, 400
+# Get working,
+# Post working, Logic needs fixing on validation of month and year
+# Functional otherwise
+api.add_resource(UserPayments, '/payments/<int:user_id>')
 
-#             user_payment = Payment(
-#                 user_id=user_id,
-#                 card_number=card_number,
-#                 cardholder_name=cardholder_name,
-#                 expiration_month=expiration_month,
-#                 expiration_year=expiration_year,
-#                 cvv=cvv
-#             )
-#             db.session.add(user_payment)
-#             db.session.commit()
-#             new_payment_info = {
-#                 "id": user_payment.id,
-#                 "card_number": user_payment.card_number,
-#                 "cardholder_name": user_payment.cardholder_name,
-#                 "expiration_month": user_payment.expiration_month,
-#                 "expiration_year": user_payment.expiration_year,
-#                 "cvv": user_payment.cvv
-#             }
-#             return new_payment_info, 201
-#         except Exception as e:
-#             traceback.print_exc()
-#             return {"Error": "Error encountered while adding the payment details", "message": str(e)}, 500
-# api.add_resource(UserPayments, '/payments/<int:user_id>')
-
-# class UserPaymentsByID(Resource):
-#     @login_required
-#     def get(self, user_id, payment_id):
-#         try:
-#             user_payment = Payment.query.filter_by(user_id=user_id, id=payment_id).first()
-#             if user_payment:
-#                 payment_info = {
-#                     "id": user_payment.id,
-#                     "card_number": user_payment.card_number,
-#                     "cardholder_name": user_payment.cardholder_name,
-#                     "expiration_month": user_payment.expiration_month,
-#                     "expiration_year": user_payment.expiration_year,
-#                     "cvv": user_payment.cvv
-#                 }
-#                 return payment_info, 200
-#             else:
-#                 return {"error": "Payment details not found"}, 404
-#         except:
-#             return {"error": "An error occurred while fetching the payment details"}, 500
+class UserPaymentsByID(Resource):
+    @login_required
+    def get(self, user_id, payment_id):
+        try:
+            user_payment = Payment.query.filter_by(user_id=user_id, id=payment_id).first()
+            if user_payment:
+                payment_info = {
+                    "id": user_payment.id,
+                    "card_number": user_payment.card_number,
+                    "cardholder_name": user_payment.cardholder_name,
+                    "expiration_month": user_payment.expiration_month,
+                    "expiration_year": user_payment.expiration_year,
+                    "cvv": user_payment.cvv
+                }
+                return payment_info, 200
+            else:
+                return {"error": "Payment details not found"}, 404
+        except:
+            return {"error": "An error occurred while fetching the payment details"}, 500
         
-#     @login_required
-#     def delete(self, user_id, payment_id):
-#         try:
-#             user_payment = Payment.query.filter_by(
-#                 user_id=user_id, id=payment_id).first()
-#             if user_payment:
-#                 db.session.delete(user_payment)
-#                 db.session.commit()
-#                 return {}, 204
-#             else:
-#                 return {"error": "Payment details not found"}, 404
-#         except:
-#             return {"error": "An error occurred while deleting the payment details"}, 500
-# api.add_resource(UserPaymentsByID, '/payments/<int:user_id>/<int:payment_id>')
+    @login_required
+    def delete(self, user_id, payment_id):
+        try:
+            user_payment = Payment.query.filter_by(
+                user_id=user_id, id=payment_id).first()
+            if user_payment:
+                db.session.delete(user_payment)
+                db.session.commit()
+                return {}, 204
+            else:
+                return {"error": "Payment details not found"}, 404
+        except:
+            return {"error": "An error occurred while deleting the payment details"}, 500
 
-# class UserAddress(Resource):
-#     @login_required
-#     def get(self, user_id):
-#         try:
-#             addresses = Address.query.filter_by(user_id=user_id).all()
-#             address_list = []
-#             for address in addresses:
-#                 address_info = {
-#                     "id": address.id,
-#                     "address_1": address.address_1,
-#                     "address_2": address.address_2,
-#                     "address_city": address.address_city,
-#                     "address_state": address.address_state,
-#                     "address_postal": address.address_postal,
-#                     "address_type": address.address_type_of
-#                 }
-#                 address_list.append(address_info)
-#             return address_list, 200
-#         except:
-#             return {"error": "An error occurred while fetching the addresses"}, 500
-    
-#     @login_required
-#     def post(self, user_id):
-#         try:
-#             data = request.get_json()
+# Get Working
+# Delete Working
+# Fully functional
+api.add_resource(UserPaymentsByID, '/payments/<int:user_id>/<int:payment_id>')
 
-#             address = Address(
-#                 user_id=user_id,
-#                 address_1=data.get('address_1'),
-#                 # Use empty string as default
-#                 address_2=data.get('address_2', ''),
-#                 address_city=data.get('address_city'),
-#                 address_state=data.get('address_state'),
-#                 address_postal=data.get('address_postal'),
-#                 address_type_of=data.get('address_type_of')
-#             )
-#             db.session.add(address)
-#             db.session.commit()
-#             address_info = {
-#                 'id': address.id,
-#                 'address_1': address.address_1,
-#                 'address_2': address.address_2,
-#                 'address_city': address.address_city,
-#                 'address_state': address.address_state,
-#                 'address_postal': address.address_postal,
-#                 'address_type_of': address.address_type_of
-#             }
-#             return address_info, 201
-#         except Exception as e:
-#             traceback.print_exc()
-#             return {'Error': 'Error while creating User address', "message": str(e)}, 500
-# api.add_resource(UserAddress, '/addresses/<int:user_id>')
+class UserAddress(Resource):
+    @login_required
+    def get(self, user_id):
+        try:
+            addresses = Address.query.filter_by(user_id=user_id).all()
+            address_list = []
+            for address in addresses:
+                address_info = {
+                    "id": address.id,
+                    "address_1": address.address_1,
+                    "address_2": address.address_2,
+                    "address_city": address.address_city,
+                    "address_state": address.address_state,
+                    "address_postal": address.address_postal,
+                    "address_type": address.address_type_of
+                }
+                address_list.append(address_info)
+            return address_list, 200
+        except:
+            return {"error": "An error occurred while fetching the addresses"}, 500
 
-# class UserAddressByID(Resource):
-#     @login_required
-#     def patch(self, user_id, address_id):
-#         try:
-#             data = request.get_json()
-#             address = Address.query.filter_by(id=address_id, user_id=user_id).first()
-#             if not address:
-#                 return {"Error": "Address not found"}, 404
+    @login_required
+    def post(self, user_id):
+        try:
+            data = request.get_json()
 
-#             for attr in data:
-#                 setattr(address, attr, data[attr])
-#             db.session.add(address)
-#             db.session.commit()
+            address = Address(
+                user_id=user_id,
+                address_1=data.get('address_1'),
+                # Use empty string as default
+                address_2=data.get('address_2', ''),
+                address_city=data.get('address_city'),
+                address_state=data.get('address_state'),
+                address_postal=data.get('address_postal'),
+                address_type_of=data.get('address_type_of')
+            )
+            db.session.add(address)
+            db.session.commit()
+            address_info = {
+                'id': address.id,
+                'address_1': address.address_1,
+                'address_2': address.address_2,
+                'address_city': address.address_city,
+                'address_state': address.address_state,
+                'address_postal': address.address_postal,
+                'address_type_of': address.address_type_of
+            }
+            return address_info, 201
+        except Exception as e:
+            traceback.print_exc()
+            return {'Error': 'Error while creating User address', "message": str(e)}, 500
 
-#             return address.to_dict(), 200
-#         except Exception as e:
-#             print("Error occurred:", str(e))
-#             return {"Error": "Error Updating Address", "message": str(e)}, 500
+# Get working(Returning empty list with empty data)
+# Post working
+# Fully functional
+api.add_resource(UserAddress, '/addresses/<int:user_id>')
 
-#     @login_required
-#     def delete(self, user_id, address_id):
-#         try:
-#             address = Address.query.filter_by(id=address_id, user_id=user_id).first()
-#             if not address:
-#                 return {"Error": "Address not found"}, 404
+class UserAddressByID(Resource):
+    @login_required
+    def patch(self, user_id, address_id):
+        try:
+            data = request.get_json()
+            address = Address.query.filter_by(id=address_id, user_id=user_id).first()
+            if not address:
+                return {"Error": "Address not found"}, 404
 
-#             db.session.delete(address)
-#             db.session.commit()
-#             return {}, 204
-#         except:
-#             return {"Error": "Error Deleting Address"}, 500
+            for attr in data:
+                setattr(address, attr, data[attr])
+            db.session.add(address)
+            db.session.commit()
 
-# api.add_resource(UserAddressByID, '/addresses/<int:user_id>/<int:address_id>')
+            return address.to_dict(), 200
+        except Exception as e:
+            print("Error occurred:", str(e))
+            return {"Error": "Error Updating Address", "message": str(e)}, 500
 
+    @login_required
+    def delete(self, user_id, address_id):
+        try:
+            address = Address.query.filter_by(id=address_id, user_id=user_id).first()
+            if not address:
+                return {"Error": "Address not found"}, 404
 
-# ######################### Products Routes ###################
-# class Categories(Resource):
-#     def get(self):
-#         try:
-#             categories = [category.to_dict()for category in Category.query.all()]
-#             return categories, 200
-#         except:
-#             return {"error": "Categories not found"}, 404
+            db.session.delete(address)
+            db.session.commit()
+            return {}, 204
+        except:
+            return {"Error": "Error Deleting Address"}, 500
 
-# class Products(Resource):
-
-#     def get(self):
-#         try:
-#             products = [product.to_dict() for product in Product.query.all()]
-#             return products, 200
-#         except Exception as e:
-#             return {"Error": "Failed to retrieve products", "message": str(e)}, 500
-
-#     def patch(self, id):
-#         try:
-#             data = request.get_json()
-#             product = Product.query.filter_by(id=id).first()
-
-#             if product:
-#                 for attr, value in data.items():
-#                     setattr(product, attr, value)
-
-#                 db.session.commit()
-#                 return product.to_dict(), 200
-#             else:
-#                 return {"error": "Product not found"}, 404
-#         except Exception as e:
-#             return {"Error": "Failed to update product", "message": str(e)}, 500
-
-# class ProductByCategory(Resource):
-
-#     def get(self, category_id):
-#         try:
-#             # Connect with Seed
-#             products = Product.query.filter_by(category_id=category_id).all()
-#             products_data = [product.to_dict() for product in products]
-#             return products_data, 200
-#         except:
-#             return {"Error": "Products not found for the specified category"}, 404
-
-# class ProductById(Resource):
-
-#     def get(self, id):
-#         try:
-#             product = Product.query.filter_by(id=id).first()
-#             return product.to_dict(), 200
-#         except Exception as e:
-#             return {"Error": "Failed to retrieve product", "message": str(e)}, 500
+# Patch Working
+# Delete Working
+api.add_resource(UserAddressByID, '/addresses/<int:user_id>/<int:address_id>')
 
 
+######################## Products Routes ###################
+class Categories(Resource):
+    def get(self):
+        try:
+            categories = [category.to_dict() for category in Category.query.all()]
+            return categories, 200
+        except:
+            return {"Error": "Categories not found"}, 404
+# Returning no data (must be syntax errror)
+api.add_resource(Categories, '/categories')
 
-# class Carts(Resource):
-#     @login_required
-#     def get(self):
-#         try:
-#             cart_items = current_user.cart.cartItems
-#             items = [
-#                 {
-#                     'item_id': item.id,
-#                     'product_id': item.product_id,
-#                     'product_name': item.product.name,
-#                     'product_quantity': item.cart_quantity
-#                 }
-#                 for item in cart_items
-#             ]
-#             cart_info = {
-#                 'user_id': current_user.id,
-#                 'items': items
-#             }
-#             return cart_info, 200
-#         except:
-#             return {'Error': 'Error fetching cart data'}, 500
+class Products(Resource):
 
-#     @login_required
-#     def post(self):
-#         try:
-#             data = request.get_json()
-#             product_id = data.get('product_id')
-#             # quantity = data.get('quantity')
-#             cart_quantity = data.get('cart_quantity')
-#             # product_quantity = data.get('product_quantity')
-
-#             product = Product.query.filter_by(id=product_id).first()
-#             if not product:
-#                 return {'Error': 'Product not found'}, 404
-
-#             cart_item = CartItem.query.filter_by(
-#                 cart_id=current_user.cart.id, product_id=product_id).first()
-#             if cart_item:
-#                 # check syntax
-#                 # check logic with cart_quantity
-#                 # cart_item.quantity += quantity
-#                 cart_item.cart_quantity += cart_quantity
-#             else:
-#                 cart_item = CartItem(
-#                     cart_id=current_user.cart.id,
-#                     product_id=product_id,
-#                     # quantity=quantity
-#                     cart_quantity= cart_quantity,
-#                 )
-#                 db.session.add(cart_item)
-
-#             db.session.commit()
-
-#             cart_items = current_user.cart.cartItems
-#             items = [
-#                 {
-#                     'item_id': item.id,
-#                     'product_id': item.product_id,
-#                     'product_name': item.product.name,
-#                     'cart_quantity': item.cart_quantity
-#                 }
-#                 for item in cart_items
-#             ]
-#             cart_info = {
-#                 'user_id': current_user.id,
-#                 'items': items
-#             }
-#             return cart_info, 201
-#         except:
-#             return {'Error': 'Error occurred adding item to cart'}, 500
-
-#     @login_required
-#     def patch(self):
-#         try:
-#             data = request.get_json()
-#             product_id = data.get('product_id')
-#             cart_quantity = data.get('cart_quantity')
-
-#             cart_item = CartItem.query.filter_by(
-#                 cart_id=current_user.cart.id, product_id=product_id).first()
-#             if cart_item:
-#                 if cart_quantity is not None:
-#                     cart_item.cart_quantity = cart_quantity
-#                 db.session.commit()
-
-#                 cart_items = current_user.cart.cart_items
-#                 items = [
-#                     {
-#                         'item_id': item.id,
-#                         'product_id': item.product_id,
-#                         'product_name': item.product.name,
-#                         'cart_quantity': item.cart_quantity
-#                     }
-#                     for item in cart_items
-#                 ]
-#                 cart_info = {
-#                     'user_id': current_user.id,
-#                     'items': items
-#                 }
-#                 return cart_info, 200
-#             else:
-#                 return {'Error': 'Item not found in cart'}, 404
-#         except:
-#             return {'Error': 'Error while updating cart item'}, 500
-
-#     @login_required
-#     def delete(self):
-#         try:
-#             data = request.get_json()
-#             item_id = data.get('item_id')
-
-#             cart_item = CartItem.query.filter_by(
-#                 cart_id=current_user.cart.id, id=item_id).first()
-#             if cart_item:
-#                 db.session.delete(cart_item)
-#                 db.session.commit()
-#                 return {}, 204
-#             else:
-#                 return {'Error': 'Item not found in cart'}, 404
-#         except:
-#             return {'Error': 'Error occurred while deleting item from cart'}, 500
+    def get(self):
+        try:
+            products = [product.to_dict(
+                # only=(
+                # 'id',
+                # 'name',
+                # 'price',
+                # 'quantity',
+                # 'e_pitch',
+                # 'description',
+                # 'image_1',
+                # 'image_2',
+                # 'application',
+                # 'ingredients',
+                # 'storage',
+                # 'intiative',
+                # 'category_id')
+                ) for product in Product.query.all()]
+            return products, 200
+        except Exception as e:
+            return {"Error": "Failed to retrieve products", "message": str(e)}, 500
 
 
-# class Checkout(Resource):
-#     @login_required
-#     def post(self):
-#         try:
-#             cart = Cart.query.filter_by(user_id=current_user.id).first()
-#             if cart:
-#                 total = 0.0
-#                 for cart_item in cart.cartItems:
-#                     total += cart_item.product.price * cart_item.cart_quantity
-#                     product = Product.query.filter_by(id=cart_item.product_id).first()
-#                     product.quantity -= cart_item.cart_quantity
-#                     db.session.add(product)
-#                 order = Order(
-#                     user_id=current_user.id,
-#                     order_total=total,
-#                     status_id=1
-#                 )
-#                 db.session.add(order)
-#                 #  .flush() communicates a series of operations to the database,he database maintains them as pending operations in a transaction. The changes aren't persisted permanently to disk, or visible to other transactions until the database receives a COMMIT for the current transaction
-#                 db.session.flush()
+    def patch(self, id):
+        try:
+            data = request.get_json()
+            product = Product.query.filter_by(id=id).first()
 
-#                 for cart_item in cart.cartItems:
-#                     order_item = OrderItems(
-#                         order_id=order.id,
-#                         product_id=cart_item.product_id,
-#                         num_of_items=cart_item.num_of_items,
-#                         items_price=cart_item.product.items_price
-#                     )
-#                     db.session.add(order_item)
+            if product:
+                for attr, value in data.items():
+                    setattr(product, attr, value)
 
-#                 cart.cartItems.clear()
-
-#                 db.session.commit()
-
-#                 return {'message': 'Order placed successfully'}, 200
-#             else:
-#                 return {'Error': 'Cart not found'}, 404
-#         except Exception as e:
-#             traceback.print_exc() 
-#             # restores your database to your last COMMIT
-#             db.session.rollback()  
-#             return {'Error': 'Error occurred placing order', 'details': str(e)}, 500
+                db.session.commit()
+                return product.to_dict(
+                # only=(
+                # 'id',
+                # 'name',
+                # 'price',
+                # 'quantity',
+                # 'e_pitch',
+                # 'description',
+                # 'image_1',
+                # 'image_2',
+                # 'application',
+                # 'ingredients',
+                # 'storage',
+                # 'intiative',
+                # 'category_id'
+                # )
+                ), 200
+            else:
+                return {"error": "Product not found"}, 404
+        except Exception as e:
+            return {"Error": "Failed to update product", "message": str(e)}, 500
+# products only working with only max recursion otherwise
+api.add_resource(Products, '/products')
 
 
+class ProductByCategory(Resource):
+    print('Intializing get for product category')
+    def get(self, category_id):
+        try:
+            # Connect with Seed
+            products = Product.query.filter_by(category_id=category_id).all()
+            products_data = [product.to_dict(
+                # only=(
+                # 'id',
+                # 'name',
+                # 'price',
+                # 'quantity',
+                # 'e_pitch',
+                # 'description',
+                # 'image_1',
+                # 'image_2',
+                # 'application',
+                # 'ingredients',
+                # 'storage',
+                # 'intiative',
+                # 'category_id')
+                ) for product in products]
+            return products_data, 200
+        except:
+            return {"Error": "Products not found for the specified category"}, 404
+# works with only, without  1,3,5 Max recurison error 
+api.add_resource(ProductByCategory, '/products/category/<int:category_id>')
 
+class ProductById(Resource):
 
-# api.add_resource(Categories, '/categories')
-# api.add_resource(Products, '/products')
-# api.add_resource(ProductById, '/products/<int:id>')
-# api.add_resource(ProductByCategory, '/products/category/<int:category_id>')
-# api.add_resource(Carts, '/carts')
-# api.add_resource(Checkout, '/checkout')
+    def get(self, id):
+        try:
+            product = Product.query.filter_by(id=id).first()
+            return product.to_dict(
+                # only=(
+                # 'id',
+                # 'name',
+                # 'price',
+                # 'quantity',
+                # 'e_pitch',
+                # 'description',
+                # 'image_1',
+                # 'image_2',
+                # 'application',
+                # 'ingredients',
+                # 'storage',
+                # 'intiative',
+                # 'category_id')
+                ), 200
+        except Exception as e:
+            return {"Error": "Failed to retrieve product", "message": str(e)}, 500
+# Working with only
+api.add_resource(ProductById, '/products/<int:id>')
+
+class Carts(Resource):
+    @login_required
+    def get(self):
+        try:
+            cart_items = current_user.cart.cartItems
+            items = [
+                {
+                    'item_id': item.id,
+                    'product_id': item.product_id,
+                    'product_name': item.product.name,
+                    'quantity': item.quantity
+                    # 'product_quantity': item.cart_quantity
+                }
+                for item in cart_items
+            ]
+            cart_info = {
+                'user_id': current_user.id,
+                'items': items
+            }
+            return cart_info, 200
+        except:
+            return {'Error': 'Error fetching cart data'}, 500
+
+    @login_required
+    def post(self):
+        try:
+            data = request.get_json()
+            product_id = data.get('product_id')
+            quantity = data.get('quantity')
+            # cart_quantity = data.get('cart_quantity')
+
+            product = Product.query.filter_by(id=product_id).first()
+            if not product:
+                return {'Error': 'Product not found'}, 404
+
+            cart_item = CartItem.query.filter_by(
+                cart_id=current_user.cart.id, product_id=product_id).first()
+            if cart_item:
+                # check logic with cart_quantity
+                cart_item.quantity += quantity
+                # cart_item.cart_quantity += cart_quantity
+            else:
+                cart_item = CartItem(
+                    cart_id=current_user.cart.id,
+                    product_id=product_id,
+                    quantity=quantity
+                    # cart_quantity= cart_quantity,
+                )
+                db.session.add(cart_item)
+
+            db.session.commit()
+
+            cart_items = current_user.cart.cartItems
+            items = [
+                {
+                    'item_id': item.id,
+                    'product_id': item.product_id,
+                    'product_name': item.product.name,
+                    'quantity': item.quantity,
+                    # 'cart_quantity': item.cart_quantity
+                }
+                for item in cart_items
+            ]
+            cart_info = {
+                'user_id': current_user.id,
+                'items': items
+            }
+            return cart_info, 201
+        except:
+            return {'Error': 'Error occurred adding item to cart'}, 500
+
+    @login_required
+    def patch(self):
+        try:
+            data = request.get_json()
+            product_id = data.get('product_id')
+            # cart_quantity = data.get('cart_quantity')
+            quantity = data.get('quantity')
+
+            cart_item = CartItem.query.filter_by(
+                cart_id=current_user.cart.id, product_id=product_id).first()
+            if cart_item:
+                # if cart_quantity is not None:
+                #     cart_item.cart_quantity = cart_quantity
+                #     # cart_item.quantity = quantity
+                if quantity is not None:
+                    cart_item.quantity = quantity
+                db.session.commit()
+
+                cart_items = current_user.cart.cartItems
+                items = [
+                    {
+                        'item_id': item.id,
+                        'product_id': item.product_id,
+                        'product_name': item.product.name,
+                        'quantity': item.quantity,
+                        # 'cart_quantity': item.cart_quantity
+                    }
+                    for item in cart_items
+                ]
+                cart_info = {
+                    'user_id': current_user.id,
+                    'items': items
+                }
+                return cart_info, 200
+            else:
+                return {'Error': 'Item not found in cart'}, 404
+        except Exception as e:
+            traceback.print_exc
+            return {'Error': 'Error while updating cart item', 'message': str(e)}, 500
+
+    @login_required
+    def delete(self):
+        try:
+            data = request.get_json()
+            item_id = data.get('item_id')
+
+            cart_item = CartItem.query.filter_by(
+                cart_id=current_user.cart.id, id=item_id).first()
+            if cart_item:
+                db.session.delete(cart_item)
+                db.session.commit()
+                return {}, 204
+            else:
+                return {'Error': 'Item not found in cart'}, 404
+        except:
+            return {'Error': 'Error occurred while deleting item from cart'}, 500
+# Working
+api.add_resource(Carts, '/carts')
+
+class Checkout(Resource):
+    @login_required
+    def post(self):
+        try:
+            cart = Cart.query.filter_by(user_id=current_user.id).first()
+            if cart:
+                total = 0.0
+                for cart_item in cart.cartItems:
+                    total += cart_item.product.price * cart_item.quantity
+                    product = Product.query.filter_by(id=cart_item.product_id).first()
+                    product.quantity -= cart_item.quantity
+                    db.session.add(product)
+                order = Order(
+                    user_id=current_user.id,
+                    order_total=total,
+                    status_id=1
+                )
+                db.session.add(order)
+                #  .flush() communicates a series of operations to the database,he database maintains them as pending operations in a transaction. The changes aren't persisted permanently to disk, or visible to other transactions until the database receives a COMMIT for the current transaction
+                db.session.flush()
+
+                for cart_item in cart.cartItems:
+                    order_item = OrderItems(
+                        order_id=order.id,
+                        product_id=cart_item.product_id,
+                        num_of_items=cart_item.quantity,
+                        items_price=cart_item.product.price
+                    )
+                    db.session.add(order_item)
+
+                cart.cartItems.clear()
+
+                db.session.commit()
+
+                return {'message': 'Order placed successfully'}, 200
+            else:
+                return {'Error': 'Cart not found'}, 404
+        except Exception as e:
+            traceback.print_exc() 
+            # restores your database to your last COMMIT
+            db.session.rollback()  
+            return {'Error': 'Error occurred placing order', 'details': str(e)}, 500
+# 
+# 
+api.add_resource(Checkout, '/checkout')
+
+# Working
 
 
 ##################### Review Routes (After MVP)#########################

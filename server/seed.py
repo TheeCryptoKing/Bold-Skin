@@ -506,8 +506,8 @@ def declare_products():
     ])
     db.session.commit()
     
-def declare_users():
-    db.session.query(User).delete()
+# def declare_users():
+    # db.session.query(User).delete()
 #     # Not populating
 #     admin = User(
 #         username = "BigDaddyK",
@@ -516,7 +516,7 @@ def declare_users():
 #         password = "bread"
 #     )
 #     db.session.add(admin)
-    db.session.commit()
+    # db.session.commit()
 
 def declare_order_status():
     db.session.query(OrderStatus).delete()
@@ -538,7 +538,7 @@ if __name__ == "__main__":
         declare_categories()
         declare_products()
         declare_order_status()
-        declare_users()
+        # declare_users()
         
 
 # def clear_tables():

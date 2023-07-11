@@ -9,22 +9,22 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from collections import OrderedDict
 from config import db, bcrypt
-import datetime
+from datetime import datetime
 import uuid
 import re
 
 ############################### Models #######################
 # flask db revision --autogenerate -m 'updating Tables'
 # flask db upgrade head 
-
+# Change to u_ when fully functional
 
 class User(db.Model, SerializerMixin, UserMixin):
     __tablename__ = 'users'
     ################################## Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False, unique=True)
     name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String(128), nullable=False)
     # wishlists = db.Column(db.String)
     ############################# DateTime Specfics
@@ -33,25 +33,25 @@ class User(db.Model, SerializerMixin, UserMixin):
     ######################## FK
     # role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     #################### Relationships 
-    # Urole = dbrelationship("Role", backref="user_role")
-    Uorders = db.relationship("Order", back_populates='user', cascade="all, delete-orphan", uselist=False)
-    Ucart = db.relationship("Cart", back_populates='user', uselist="False", cascade="all, delete-orphan")
-    Upayments = db.relationship("Payment", back_populates='user')
-    # Ureviews = db.relationship("Review", back_populates='user', cascade="all, delete-orphan")
-    # Ucomments = db.relationship("Comment", back_populates='user', cascade="all, delete-orphan")
-    Uaddresses = db.relationship("Address", back_populates='user')
+    # role = dbrelationship("Role", backref="user_role")
+    orders = db.relationship("Order", back_populates='user')
+    cart = db.relationship("Cart", uselist=False, back_populates="user", cascade="all, delete-orphan")
+    payments = db.relationship("Payment", back_populates='user')
+    # reviews = db.relationship("Review", back_populates='user', cascade="all, delete-orphan")
+    # comments = db.relationship("Comment", back_populates='user', cascade="all, delete-orphan")
+    addresses = db.relationship("Address", back_populates='user')
     ########### Validation & Seriaization
     serialize_rules = (
         # '-created_at',
         # '-updated_at',
         # '-_password_hash',
-        '-Uorders',
-        # '-Urole',
-        '-Ucart',
-        '-Upayments',
-        '-Uaddresses',
-        # '-Ureviews',
-        # '-Ucomments',
+        '-orders',
+        # '-role',
+        '-cart',
+        '-payments',
+        '-addresses',
+        # '-reviews',
+        # '-comments',
         )
     @validates('username')
     def vaidates_Uname(self, key, uname):
@@ -103,38 +103,47 @@ class Product(db.Model, SerializerMixin):
     intiative = db.Column(db.String)
     ###################### DateTime Specfics
     ###################### FK
-    # Connnect yourself in seed
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id')) 
     ########################## Relationships 
     # Backref = automatically adds a new attribute to the target table's model, which provides access to related objects from the source table. 
     cartItems =  db.relationship("CartItem", back_populates="product")
-    Prod_category = db.relationship("Category", backref="category")
-    # Prod_reviews = db.relationship("Review", back_populates="product")
+    # Prod_category = db.relationship("Category", backref="products_category")
+    category = db.relationship("Category", back_populates="products")
+    # reviews = db.relationship("Review", back_populates="product")
     order_items = db.relationship("OrderItems", back_populates="product")
     ####################### Validation & Serialization
     serialize_rules = (
         '-cartItems',
+        '-cartItems.product',
         '-order_items',
-        '-Prod_category.id',
-        '-Prod_category.name',
-        '-Prod_category.products'
+        '-order_items.product',
+        # STOP FUCKING WRITING THINGS IN UPPERCASE DESIGNER 
+        # '-Prod_category.id',
+        # '-Prod_category.name',
+        # '-Prod_category.product_category',
+        '-category',
+        '-category.products',
+        '-category_id',
         )
+    # serialize_only = ('id','name','price','quantity','e_pitch','description','image_1','image_2','application','ingredients','storage','intiative')
 
 class Category(db.Model, SerializerMixin):
     __tablename__ = 'categories'
     ####################### Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.Text, nullable=False)
     ####################### Relationships
     ######################## Validation & Serialization
+    products = db.relationship("Product", back_populates="category")
+    serialize_rules=('-products','-product.category')
+
 
 
 class Order(db.Model, SerializerMixin):
     __tablename__ = 'orders'
     ####################### Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    order_total = db.Column(db.Integer)
-    order_status = db.Column(db.String)
+    order_total = db.Column(db.Integer, nullable=False)
     ###################### DateTime Specfics
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -142,14 +151,14 @@ class Order(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     status_id = db.Column(db.Integer, db.ForeignKey("order_status.id"))
     ########################## Relationships
-    user = db.relationship("User", back_populates="Uorders")
+    user = db.relationship("User", back_populates="orders")
     order_items = db.relationship("OrderItems", back_populates="orders")
     status = db.relationship("OrderStatus", backref="order_status")
     ####################### Validation & Serialization
     serialize_rules = (
         '-user',
         '-order_items',
-        '-status',
+        '-status'
     #     '-Prod_reviews',
         )
 
@@ -157,8 +166,8 @@ class OrderItems(db.Model, SerializerMixin):
     __tablename__ = 'order_items'
     ####################### Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    num_of_items = db.Column(db.Integer, nullable=True)
-    items_price = db.Column(db.Integer, nullable=True)
+    num_of_items = db.Column(db.Integer, nullable=False)
+    items_price = db.Column(db.Integer, nullable=False)
     ###################### DateTime Specfics
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     ###################### FK
@@ -170,7 +179,9 @@ class OrderItems(db.Model, SerializerMixin):
     ####################### Validation & Serialization
     serialize_rules = (
         '-orders',
+        '-orders.order_items',
         '-product',
+        '-product.order_items'
         )
 
 class OrderStatus(db.Model, SerializerMixin):
@@ -181,11 +192,11 @@ class OrderStatus(db.Model, SerializerMixin):
     ###################### DateTime Specfics
     ###################### Relationships
     ####################### Validation & Serialization
-    serialize_rules = ('order_status',)
+    serialize_rules = ('-order_status','-order_status.status',)
     def to_dict(self):
         return {
             "id": self.id,
-            "status": self.status
+            "status": self.order_status
         }
     # serialize_only = ('id','status',)
     # def to_dict(self):
@@ -201,7 +212,7 @@ class Cart(db.Model, SerializerMixin):
     ####################### FK
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ########################### Relationships
-    user = db.relationship("User", back_populates='Ucart')
+    user = db.relationship("User", back_populates="cart")
     cartItems = db.relationship("CartItem", back_populates='cart')
     ######################## Validation & Serialization
     serialize_rules = (
@@ -214,7 +225,8 @@ class CartItem(db.Model, SerializerMixin):
     __tablename__ = 'cart_items'
     ######################## Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    cart_quantity = db.Column(db.Integer)
+    # cart_quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, nullable=False)
     ####################### DateTime Specfics
     ####################### FK
     cart_id = db.Column(db.Integer, db.ForeignKey('cartstuff.id')) 
@@ -222,10 +234,10 @@ class CartItem(db.Model, SerializerMixin):
     ########################### Relationships
     cart = db.relationship("Cart", back_populates="cartItems")
     product = db.relationship("Product", back_populates="cartItems")
-#     ######################## Validation & Serialization
+    ######################## Validation & Serialization
     serialize_rules = (
         '-cart',
-        '-product',
+        '-product'
         )
 
 
@@ -246,8 +258,8 @@ class Payment(db.Model, SerializerMixin):
     ####################### FK
     user_id = db.Column("User",db.ForeignKey('users.id'))
     ####################### Relationships
-    user = db.relationship("User", back_populates='Upayments')
-#     ######################## Validation & Serialization
+    user = db.relationship("User", back_populates='payments')
+    ######################## Validation & Serialization
     @validates('card_number')
     def validate_card_number(self, key, card_number):
         if not card_number or card_number.isspace():
@@ -255,27 +267,29 @@ class Payment(db.Model, SerializerMixin):
 
         if not re.match(r'^[0-9]{16}$', card_number):
             raise ValueError("Invalid card.")
-
         return card_number
 
     @validates('cardholder_name')
     def validate_cardholder_name(self, key, cardholder_name):
         if not cardholder_name or cardholder_name.isspace():
+            # isspace() = checking for whitespace
             raise ValueError("Cardholder name required.")
         return cardholder_name
 
-    @validates('expiration_month')
-    def validate_expiration_month(self, key, expiration_month):
-        if expiration_month < 1 or expiration_month > 12:
-            raise ValueError("Invalid expiration month.")
-        return expiration_month
+    # @validates('expiration_month')
+    # def validate_expiration_month(self, key, expiration_month):
+    #     if expiration_month < 1 or expiration_month > 12:
+    #         raise ValueError("Invalid expiration month.")
+    #     return expiration_month
+    # Fix logic
 
-    @validates('expiration_year')
-    def validate_expiration_year(self, key, expiration_year):
-        current_year = datetime.now().year
-        if expiration_year < current_year or expiration_year > (current_year + 10):
-            raise ValueError("Invalid expiration year.")
-        return expiration_year
+    # @validates('expiration_year')
+    # def validate_expiration_year(self, key, expiration_year):
+    #     current_year = datetime.now().year
+    #     if expiration_year < current_year or expiration_year > (current_year + 10):
+    #         raise ValueError("Invalid expiration year.")
+    #     return expiration_year
+    # Fix logic
 
 # class Review(db.Model, SerializerMixin):
 #     __tablename__ = 'reviews'
@@ -290,8 +304,8 @@ class Payment(db.Model, SerializerMixin):
 #     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 #     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 #     ####################### Relationships
-#     user = db.relationship("User", back_populates="Ureviews")
-#     product = db.relationship("Product", back_populates="Prod_reviews")
+#     user = db.relationship("User", back_populates="reviews")
+#     product = db.relationship("Product", back_populates="reviews")
 #     comments = db.relationship("Comment", back_populates='review', cascade="all, delete-orphan")
 #     ######################## Validation & Serialization
 #     @validates('review_rating')
@@ -334,7 +348,7 @@ class Payment(db.Model, SerializerMixin):
 #     review_id = db.Column(db.Integer, db.ForeignKey('reviews.id')) 
 #     ####################### Relationships
 #     review = db.relationship("Review", back_populates="comments")
-#     user = db.relationship("User", back_populates="Ucomments")
+#     user = db.relationship("User", back_populates="comments")
 #     ######################## Validation & Serialization
 #     # serialize_rules = ('-created_at','-updated_at','',)
 #     @validates('user_comment')
@@ -371,33 +385,33 @@ class Address(db.Model, SerializerMixin):
     ####################### FK
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     ####################### Relationships
-    user = db.relationship("User", back_populates="Uaddresses")
-#     ######################## Validation & Serialization
-    serialize_rules = ("-user",)
-#     @validates('address_postal')
-#     def validate_address_postal(self, key, address_postal):
-#         pattern = r'^\d{5}$'
+    user = db.relationship("User", back_populates="addresses")
+    ######################## Validation & Serialization
+    serialize_rules = ("-user","-user.addresses")
+    @validates('address_postal')
+    def validate_address_postal(self, key, address_postal):
+        pattern = r'^\d{5}$'
 
-#         if not re.match(pattern, str(address_postal)):
-#             raise ValueError('Invalid postal code.')
+        if not re.match(pattern, str(address_postal)):
+            raise ValueError('Invalid postal code.')
 
-#         return address_postal
+        return address_postal
 
-#     @validates('address_state')
-#     def validate_state(self, key, state):
-#         valid_states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
-#                         'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-#                         'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT',
-#                         'VA', 'WA', 'WV', 'WI', 'WY']
-#         if state not in valid_states:
-#             raise ValueError('Invalid state,')
-#         return state
+    @validates('address_state')
+    def validate_state(self, key, state):
+        valid_states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
+                        'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+                        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT',
+                        'VA', 'WA', 'WV', 'WI', 'WY']
+        if state not in valid_states:
+            raise ValueError('Invalid state,')
+        return state
 
-#     @validates('address_1', 'address_city', 'address_type_of')
-#     def validate_non_empty_fields(self, key, value):
-#         if value is not None and not value.strip():
-#             raise ValueError("Field must cannot be empty.")
-#         return value
+    @validates('address_1', 'address_city', 'address_type_of')
+    def validate_non_empty_fields(self, key, value):
+        if value is not None and not value.strip():
+            raise ValueError("Field must cannot be empty.")
+        return value
 
 # Unsure if needed
 # class Role(db.Model, SerializerMixin):
