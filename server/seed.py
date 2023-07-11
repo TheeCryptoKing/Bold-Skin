@@ -14,10 +14,10 @@ from models import (
     Cart,
     CartItem,
     Payment,
-    Review,
-    Comment,
+#     Review,
+#     Comment,
     Address,
-    Role
+#     Role
 )
 import pickle
 import os
@@ -26,7 +26,7 @@ import json
 import ast
 import csv
 
-fake = Faker()
+# fake = Faker()
 
 
 
@@ -76,6 +76,7 @@ def declare_products():
         application = None,
         ingredients = "Cotton & Hemp",
         storage = "Wash on slow, on cold and warm and please airdry",
+        category_id = 1
     )
     SummerJogger = Product(
         name = "Bozy Summer Time Set",
@@ -89,6 +90,7 @@ def declare_products():
         application = None,
         ingredients = "Cotton & Hemp",
         storage = "Wash on slow, on cold and warm and please airdry",
+        category_id = 1
     )
     WhiteT = Product(
         name = "Bold White T-shirt",
@@ -102,6 +104,7 @@ def declare_products():
         application = None,
         ingredients = "Cotton & Hemp",
         storage = "Wash on slow, on cold and warm and please airdry",
+        category_id = 1
     )
     BlackT = Product(
         name = "Bold Black T-shirt",
@@ -115,6 +118,7 @@ def declare_products():
         application = None,
         ingredients = "Cotton & Hemp",
         storage = "",
+        category_id = 1
     )
     LightGreyT = Product(
         name = "Bold LightGrey T-shirt",
@@ -128,6 +132,7 @@ def declare_products():
         application = None,
         ingredients = "Cotton & Hemp",
         storage = "Wash on slow, on cold and warm and please airdry",
+        category_id = 1
     )
     WavyCurlComb = Product(
         name = "Wavy Curl Comb ",
@@ -141,6 +146,7 @@ def declare_products():
         application = None,
         ingredients = "Contains Recylced Materials, Non-Carcengonic ink",
         storage = "Please do not drop boiling water or store in Heavy Sunlight for Extended Periods at a time",
+        category_id = 1
     )
     TightCurlComb = Product(
         name = "Tight Curl Comb",
@@ -154,6 +160,7 @@ def declare_products():
         application = None,
         ingredients = "Contains Recylced Materials, Non-Carcengonic ink",
         storage = "Please do not drop boiling water or store in Heavy Sunlight for Extended Periods at a time",
+        category_id = 1
     )
     FineComb = Product(
         name = "'Fine' Comb",
@@ -167,6 +174,7 @@ def declare_products():
         application = None,
         ingredients = "Contains Recylced Materials, Non-Carcengonic ink",
         storage = "Please do not drop boiling water or store in Heavy Sunlight for Extended Periods at a time.",
+        category_id = 1
     )
     MediumComb = Product(
         name = "'Medium' Comb",
@@ -180,6 +188,7 @@ def declare_products():
         application = None,
         ingredients = "Contains Recylced Materials, Non-Carcengonic ink",
         storage = "Please do not drop boiling water or store in Heavy Sunlight for Extended Periods at a time.",
+        category_id = 1
     )
     ThickComb = Product(
         name = "'Thick' Comb",
@@ -193,6 +202,7 @@ def declare_products():
         application = None,
         ingredients = "Contains Recylced Materials, Non-Carcengonic ink",
         storage = "Please do not drop boiling water or store in Heavy Sunlight for Extended Periods at a time.",
+        category_id = 1
     )
     SoftBristleBrush = Product(
         name = "Bamboo 'Soft' Bristle Brushe",
@@ -206,6 +216,7 @@ def declare_products():
         application = None,
         ingredients = "Cleanly-sourced and Reused-Bamboo, Cruelty-free Boar-Bristle Brushes",
         storage = "Regularly clean bristles every 3 months w/ soap and water. Do not soak or leave wood in Water for long perids of Time",
+        category_id = 1
     )
     HardBristleBrush = Product(
         name = "Bamboo 'Hard' Bristle Brush",
@@ -219,6 +230,7 @@ def declare_products():
         application = None,
         ingredients = "Cleanly-sourced and Reused-Bamboo, Cruelty-free Boar-Bristle Brushes",
         storage = "Regularly clean bristles every 3 months w/ soap and water. Do not soak or leave wood in Water for long perids of Time",
+        category_id = 1
     )
     FeelGoodLotion = Product(
         name = "Smell Good Lotion",
@@ -232,6 +244,7 @@ def declare_products():
         application = "For best result when applied to damp skin.",
         ingredients = "Kalahari Melon oil, Sorrel oil, Baobab oil, Sunflower oil, Rice Bran oil, Coconut oil, Jojoba oil, Shea Butter, Mango butter, Fragrance",
         storage = "Store in a low humid, cool, and Dry Place",
+        category_id = 3
     )
     
     Smell_good_deodorant = Product(
@@ -246,6 +259,7 @@ def declare_products():
         application = "Apply after Fresh out of shower to smell good for the longest possible time",
         ingredients = "Hemp, Coconut oil, Rosemary Extract, Arrowroot Powder, Shea Butter, Sunflower Seed Wax, Candelilla Wax, (Rosemary) Flower Extract, Soybean oil, Lavandin Oil, Basil Oil, Geranium Oil, Rosemary Oil and Fragrance",
         storage = "None",
+        category_id = 3
     )
     Styling_gel = Product(
         name = "Locced-In Styling Gel",
@@ -259,6 +273,21 @@ def declare_products():
         application = "Wash and condition Hair. Get preparation's for Styling add gel as you apply style.",
         ingredients = "Water, Carbomer, Triethanolamine, Soy Bean Oil, VP/DMAPA and Acrylates Copolymer Styrene/Acrylate Copolymer, Yarrow Roots Extract, Rosemary Extract, Nettle Extract, Capryloyl Glycol Phenoxyethanol, Fragrance",
         storage = "Keep in cool & non-humid Area.",
+        category_id = 5
+    )
+    Hair_growth_oil = Product(
+        name = "Bold Growth Oil",
+        price = 44.99,
+        quantity = 100,
+        e_pitch = "No Gimmicks, just natural product backed by science that actually work and happen to smell good.",
+        description = "Male pattern badness is a real thing alot majority of men suffer from it in some form, wether it be in your face or starting to persist and yes we know you used to have a beautiful full head of hair in you 20's but to restore that scalp right now to that legally draftable glory try our Follicle Stimulating, DHT Blocking, Hair growth tested-oil formula, to achieve the fastest and heathiest hair growth possible. Sustainably hand blended and has regrown Hair of All types and all genders also promotes excelled hair growth.  ",
+        image_1 = "https://raw.githubusercontent.com/TheeCryptoKing/Bold-Skin/testbranch/assets/Products/HairGrowth/Hair_Growth_Oils.png",
+        image_2 = None ,
+        background = None,
+        application = "Apply 3 times a week before washing, Use our BoldSkin Shampoo & cleanse scalp",
+        ingredients = " jojoba oil, Rosemary oil, Green Coffee Bean Oil, peppermint oil, Pumpkin Seed oil, Argan Oil, Tea Tree Oil, Lavendar Oil ",
+        storage = "Store in cool Dry place and Keep away from Sunlight",
+        category_id = 5
     )
     # Add A Styling Wax (For harder sweater's)
     # Style_shine_spray = Product(
@@ -274,19 +303,6 @@ def declare_products():
     #     ingredients = "",
     #     storage = "",
     # )
-    Hair_growth_oil = Product(
-        name = "Bold Growth Oil",
-        price = 44.99,
-        quantity = 100,
-        e_pitch = "No Gimmicks, just natural product backed by science that actually work and happen to smell good.",
-        description = "Male pattern badness is a real thing alot majority of men suffer from it in some form, wether it be in your face or starting to persist and yes we know you used to have a beautiful full head of hair in you 20's but to restore that scalp right now to that legally draftable glory try our Follicle Stimulating, DHT Blocking, Hair growth tested-oil formula, to achieve the fastest and heathiest hair growth possible. Sustainably hand blended and has regrown Hair of All types and all genders also promotes excelled hair growth.  ",
-        image_1 = "https://raw.githubusercontent.com/TheeCryptoKing/Bold-Skin/testbranch/assets/Products/HairGrowth/Hair_Growth_Oils.png",
-        image_2 = None ,
-        background = None,
-        application = "Apply 3 times a week before washing, Use our BoldSkin Shampoo & cleanse scalp",
-        ingredients = " jojoba oil, Rosemary oil, Green Coffee Bean Oil, peppermint oil, Pumpkin Seed oil, Argan Oil, Tea Tree Oil, Lavendar Oil ",
-        storage = "Store in cool Dry place and Keep away from Sunlight",
-    )
     # Face_Scrub = Product(
     #     name = "",
     #     price = "",
@@ -472,9 +488,10 @@ def declare_products():
         FeelGoodLotion,
         
         Smell_good_deodorant,
-        # Styling_gel,
-        # Style_shine_spray,
+        Styling_gel,
         Hair_growth_oil,
+        
+        # Style_shine_spray,
         # Face_Scrub,
         # Face_Moisturizer,
         # Beard_Wash,
@@ -489,46 +506,46 @@ def declare_products():
     ])
     db.session.commit()
     
+def declare_users():
+    db.session.query(User).delete()
+#     # Not populating
+#     admin = User(
+#         username = "BigDaddyK",
+#         name = "big bread",
+#         email = "bread@gmail.com",
+#         password = "bread"
+#     )
+#     db.session.add(admin)
+    db.session.commit()
+
+def declare_order_status():
+    db.session.query(OrderStatus).delete()
+    ordered = OrderStatus(
+        status= "Ordered"
+    )
+    in_transit = OrderStatus(
+        status= "In Transit"
+    )
+    delivered = OrderStatus(
+        status = "Delivered"
+    )
+    db.session.add_all([ordered, in_transit, delivered])
+    db.session.commit()
 
 if __name__ == "__main__":
     with app.app_context():
+        
         declare_categories()
         declare_products()
+        declare_order_status()
+        declare_users()
         
 
 # def clear_tables():
-#     db.session.query(User).delete()
+    # db.session.query(User).delete()
 #     db.session.query(Cart).delete()
-#     db.session.commit()
+    # db.session.commit()
     
-# def declare_users():
-#     pass
 
-# def declare_role():
-    # pass
 
-# def declare_orders():
-#     pass
-
-# def declare_order_items():
-    # pass
-
-# def declare_cart():
-    # pass
-
-# def declare_cart_items():
-    # pass
-    
-# def declare_payments():
-    # pass
-    
-# def declare_addresses():
-    # pass
-    
-# def declare_reviews():
-    # pass
-    
-# def declare_comments():
-    # pass
-    
 
