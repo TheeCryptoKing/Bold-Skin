@@ -124,68 +124,71 @@ class CheckSession(Resource):
         return {"Error": "Unauthorized user"}, 401
 # working
 
-api.add_resource(Login, '/api/login')
-api.add_resource(Signup, '/api/signup')
-api.add_resource(CheckSession, '/api/check_session')
+api.add_resource(Login, '/login')
+api.add_resource(Signup, '/signup')
+api.add_resource(CheckSession, '/check_session')
 
-# # ################ USER ROUTES ######################
+# ################ USER ROUTES ######################
 
 # If adding new route, server needs to be restarted
-# class Users(Resource):
-#     @login_required
-#     def get(self):
-#         try:
-#             user = current_user
-#             if user:
-#                 return {
-#                     "id" : user.id,
-#                     "name": user.name,
-#                     "email": user.email,
-#                 }, 200
-#             else: 
-#                 return {"Error" : "User not found"}, 404
-#         except:
-#             return {"Error" : "Error fetching User data"}, 500
+class Users(Resource):
+    @login_required
+    def get(self):
+        try:
+            user = current_user
+            if user:
+                return {
+                    "id" : user.id,
+                    "name": user.name,
+                    "email": user.email,
+                }, 200
+            else: 
+                return {"Error" : "User not found"}, 404
+        except:
+            return {"Error" : "Error fetching User data"}, 500
+        # working
         
-        
-#     @login_required 
-#     def patch(self):
-#         try:
-#             user = current_user
-#             if user:
-#                 data = request.get_json()
-#                 user.email = data.get('email', user.email)
-#                 # Hashed
-#                 user_pass = data.get("password")
-#                 if user_pass:
-#                     hashedP = generate_password_hash(user_pass)
-#                     user._password_hash = hashedP
+    @login_required 
+    def patch(self):
+        try:
+            user = current_user
+            if user:
+                data = request.get_json()
+                user.email = data.get('email', user.email)
+                # Hashed
+                user_pass = data.get("password")
+                if user_pass:
+                    hashedP = generate_password_hash(user_pass)
+                    user._password_hash = hashedP
+                # Add Patch for username
                 
-#                 db.session.commit()
-#                 return {
-#                     "id" : user.id,
-#                     "name": user.name,
-#                     "email": user.email
-#                 }, 200
-#             else:
-#                 return {"error" : "User not found"}, 404
-#         except:
-#             return {"error" : "Error with Updating Users"}, 500
+                db.session.commit()
+                return {
+                    "id" : user.id,
+                    "name": user.name,
+                    "email": user.email
+                }, 200
+            else:
+                return {"error" : "User not found"}, 404
+        except:
+            return {"error" : "Error with Updating Users"}, 500
+        # Working
         
-        
-#     @login_required
-#     def delete(self):
-#         try:
-#             user = current_user
-#             if user:
-#                 db.session.delete(user)
-#                 db.session.commit()
-#                 return {}, 204
-#             else:
-#                 return {"error" : "User not found"}, 404
-#         except:
-#             return {"error" : "Error with Deleting User"}, 500
-# api.add_resource(Users, '/users')
+    @login_required
+    def delete(self):
+        try:
+            user = current_user
+            if user:
+                db.session.delete(user)
+                db.session.commit()
+                return {}, 204
+            else:
+                return {"error" : "User not found"}, 404
+        except:
+            return {"error" : "Error with Deleting User"}, 500
+        # Working
+api.add_resource(Users, '/users')
+# Fully fuctional
 
 # class UserOrders(Resource):
 #     @login_required
@@ -205,6 +208,7 @@ api.add_resource(CheckSession, '/api/check_session')
 #         except Exception as e:
 #             traceback.print_exc()
 #             return {"error" : "Error while fetching order history", "message": str(e)}, 500
+        
 # api.add_resource(UserOrders, '/user/orders')
 
 # class UserOrdersByID(Resource):

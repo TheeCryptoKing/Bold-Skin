@@ -57,18 +57,18 @@ class User(db.Model, SerializerMixin, UserMixin):
     def vaidates_Uname(self, key, uname):
         if not uname and len(uname) <= 2:
             raise ValueError('Invalid Username Boss')
-        return ValueError
+        return uname
     @validates('email')
     def validates_email(self, key, email):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             raise ValueError('Invalid email Boss')
         return email
-    def validate_email(self, key, email):
-        try:
-            valid = validate_email(email)
-            return valid.email
-        except EmailNotValidError as e:
-            raise ValueError('Invalid Email') from e
+    # def validate_email(self, key, email):
+    #     try:
+    #         valid = validate_email(email)
+    #         return valid.email
+    #     except EmailNotValidError as e:
+    #         raise ValueError('Invalid Email') from e
     
     # password hashing
     @hybrid_property
@@ -146,12 +146,12 @@ class Order(db.Model, SerializerMixin):
     order_items = db.relationship("OrderItems", back_populates="orders")
     status = db.relationship("OrderStatus", backref="order_status")
     ####################### Validation & Serialization
-    # serialize_rules = (
-    #     '-user',
-    #     '-order_items',
-    #     '-status',
+    serialize_rules = (
+        '-user',
+        '-order_items',
+        '-status',
     #     '-Prod_reviews',
-    #     )
+        )
 
 class OrderItems(db.Model, SerializerMixin):
     __tablename__ = 'order_items'
@@ -181,12 +181,12 @@ class OrderStatus(db.Model, SerializerMixin):
     ###################### DateTime Specfics
     ###################### Relationships
     ####################### Validation & Serialization
-    # serialize_rules = ('order_status',)
-    # def to_dict(self):
-    #     return {
-    #         "id": self.id,
-    #         "status": self.status
-    #     }
+    serialize_rules = ('order_status',)
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "status": self.status
+        }
     # serialize_only = ('id','status',)
     # def to_dict(self):
     #     serialized_data = {attr: getattr(self, attr) for attr in self.serialize_only}
