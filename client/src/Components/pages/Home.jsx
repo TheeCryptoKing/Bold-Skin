@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 const Home = () => {
     return (
-      <div>
-        <h1>Welcome to the Current Landing Page</h1>
-      </div>
+    <div className="justify-content center">
+        <h1>Welcome to the Current Home Page</h1>
+    </div>
     );
-  };
-  
-  export default Home;
+};
+
+export default Home;

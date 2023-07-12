@@ -5,9 +5,11 @@ import Home from './Components/pages/Home.jsx'
 import Login from './Components/login.jsx'
 import Signup from './Components/signup.jsx'
 import Header from './Components/Header.jsx'
+import Footer from './Components/Footer.jsx'
 import ProcessUser from './Components/pages/Login-Signup.jsx'
 import Context from './Components/Context.jsx'
 import 'bootstrap/dist/css/bootstrap.css';
+
 // import './stylesheet/index.css'
 
 
@@ -36,6 +38,7 @@ useEffect(() => {
         <Route path="/login" element={<ProcessUser />} />
       </Routes>
       </div>
+      <Footer />
     </Router>
     </div>
     </Context.Provider>

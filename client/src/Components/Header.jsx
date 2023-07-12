@@ -1,4 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+// import { CgProfile,  FaBeer  } from "react-icons/fa";
+import { FaBeer } from "@react-icons/all-files/fa/FaBeer";
+// CgProfile, ImProfile (Profile)
+// GrCart, GiShoppingCart (Cart)
+import { CgUser, CgProfile } from "react-icons/cg";
+
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -14,7 +20,9 @@ function Header() {
           <img 
             className="brandLogo"
             alt="Bold Skin"
-            src="https://imgur.com/kCMiyqO"
+            src="https://raw.githubusercontent.com/TheeCryptoKing/Bold-Skin/main/assets/Products/BoldSkin/BoldSkinLogo.png"
+            width= "175px"
+            height="125px"
           />
           </Navbar.Brand>
           {/* <Navbar.Toggle aria-controls="navbarScroll" /> */}
@@ -24,21 +32,24 @@ function Header() {
               style={{ maxHeight: '100px' }}
               navbarScroll
             >
-              <Nav.Link href="#action1">Home</Nav.Link>
+              {/* <Nav.Link href="#action1"></Nav.Link>
               <Nav.Link href="#action2">Link</Nav.Link>
-              <NavDropdown title="Link" id="navbarScrollingDropdown">
+              <Nav.Link href="#action1">Home</Nav.Link>
+              <Nav.Link href="#action1">Hair Growth</Nav.Link> */}
+              {/* <NavDropdown title="Link" id="navbarScrollingDropdown">
                 <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">
+                {/* <NavDropdown.Item href="#action4">
                   Another action
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">
+                {/* <NavDropdown.Item href="#action5">
                   Something else here
-                </NavDropdown.Item>
-              </NavDropdown>
-              <Nav.Link href="#" disabled>
-                Link
-              </Nav.Link>
+                </NavDropdown.Item> */}
+              {/* </NavDropdown>  */} 
+              {/* <Nav.Link href="#" disabled>
+                Profile
+              </Nav.Link> */}
+              {/* right side modal */}
             </Nav>
             {/* <Form className="d-flex">
               <Form.Control
@@ -49,6 +60,11 @@ function Header() {
               />
               <Button variant="outline-success">Search</Button>
             </Form> */}
+            {/* <Nav.Link href="#action2"><CgProfile/></Nav.Link> */}
+            <Nav.Link href="#action2">Profile</Nav.Link>
+            <Nav.Link href="#action2">Cart</Nav.Link>
+            <Nav.Link href="#action2">More</Nav.Link>
+
           </Navbar.Collapse>
         </Container>
       </Navbar>
