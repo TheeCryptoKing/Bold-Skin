@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+// import './Components/Header.jsx'
+import Home from './Components/pages/Home.jsx'
+import Login from './Components/login.jsx'
+import Signup from './Components/signup.jsx'
+import Header from './Components/Header.jsx'
+import ProcessUser from './Components/pages/Login-Signup.jsx'
+import Context from './Components/Context.jsx'
+import 'bootstrap/dist/css/bootstrap.css';
+// import './stylesheet/index.css'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+const [curr_user, setCurr_User] = useState(null)
+
+useEffect(() => {
+  if(curr_user == null) {
+    fetch('/api/check_session')
+    .then(res => {
+      if (res.ok) {
+        res.json().then(curr_user => {setCurr_User(curr_user)})
+      }
+    })
+  }
+},[])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Context.Provider value={{curr_user, setCurr_User}}>
+    <div className="app-container">
+    <Router>
+      <Header />
+      <div className="content-container">
+      <Routes>
+        <Route path="/" index element={<Home />} />
+        <Route path="/login" element={<ProcessUser />} />
+      </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </Router>
+    </div>
+    </Context.Provider>
   )
 }
 

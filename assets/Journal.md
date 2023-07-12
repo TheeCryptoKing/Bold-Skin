@@ -76,8 +76,9 @@ Advanced Status: Start after MVP<br>
 
 - Kwame Log<br>
 Creating Tables<br> 
-All base data created, Relationships next<br>
+All base data created, Relationships next <br>
 Populated categories, products, Need to write serializers, validations, flasklogin parameters, API routes, bcrypt, and password hash  <br>
+Starting React and Styling, Intialize footer, Header, Login, Signup and Basic Layout for all Pages <br>
 
 
 <!-- ######################## Bold-Skin Product's  ######
