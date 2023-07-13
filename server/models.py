@@ -276,20 +276,20 @@ class Payment(db.Model, SerializerMixin):
             raise ValueError("Cardholder name required.")
         return cardholder_name
 
-    # @validates('expiration_month')
-    # def validate_expiration_month(self, key, expiration_month):
-    #     if expiration_month < 1 or expiration_month > 12:
-    #         raise ValueError("Invalid expiration month.")
-    #     return expiration_month
-    # Fix logic
+    @validates('expiration_month')
+    def validate_expiration_month(self, key, expiration_month):
+        if expiration_month < 1 or expiration_month > 12:
+            raise ValueError("Invalid expiration month.")
+        return expiration_month
+    # Fix logic for backend
 
-    # @validates('expiration_year')
-    # def validate_expiration_year(self, key, expiration_year):
-    #     current_year = datetime.now().year
-    #     if expiration_year < current_year or expiration_year > (current_year + 10):
-    #         raise ValueError("Invalid expiration year.")
-    #     return expiration_year
-    # Fix logic
+    @validates('expiration_year')
+    def validate_expiration_year(self, key, expiration_year):
+        current_year = datetime.now().year
+        if expiration_year < current_year or expiration_year > (current_year + 10):
+            raise ValueError("Invalid expiration year.")
+        return expiration_year
+    # Fix logic for backend
 
 # class Review(db.Model, SerializerMixin):
 #     __tablename__ = 'reviews'

@@ -103,7 +103,7 @@ class Login(Resource):
         if user:
             if user.authenticate(password):
                 login_user(user, remember=True)
-                return {'message': 'Login successful'}, 200
+                return user.to_dict(), 200
         return {'Error':'401 Unauthorized'}, 401
 # Working
 
@@ -456,7 +456,6 @@ class Categories(Resource):
             return categories, 200
         except:
             return {"Error": "Categories not found"}, 404
-# Returning no data (must be syntax errror)
 api.add_resource(Categories, '/categories')
 
 class Products(Resource):
@@ -515,7 +514,6 @@ class Products(Resource):
                 return {"error": "Product not found"}, 404
         except Exception as e:
             return {"Error": "Failed to update product", "message": str(e)}, 500
-# products only working with only max recursion otherwise
 api.add_resource(Products, '/products')
 
 
@@ -544,7 +542,6 @@ class ProductByCategory(Resource):
             return products_data, 200
         except:
             return {"Error": "Products not found for the specified category"}, 404
-# works with only, without  1,3,5 Max recurison error 
 api.add_resource(ProductByCategory, '/products/category/<int:category_id>')
 
 class ProductById(Resource):
@@ -570,7 +567,6 @@ class ProductById(Resource):
                 ), 200
         except Exception as e:
             return {"Error": "Failed to retrieve product", "message": str(e)}, 500
-# Working with only
 api.add_resource(ProductById, '/products/<int:id>')
 
 class Carts(Resource):
@@ -748,8 +744,11 @@ class Checkout(Resource):
 # 
 # 
 api.add_resource(Checkout, '/checkout')
-
 # Working
+
+# Endpoints list 
+# /login, /signup, checksesion, 
+
 
 
 ##################### Review Routes (After MVP)#########################

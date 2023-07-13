@@ -1,75 +1,152 @@
-@import url('https://fonts.cdnfonts.com/css/harlow-solid-italic');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+/* General Styling */
+:root {
+  --logo-color: #d45f5f;
+  --blood-orange: #fe5f55;
+  --cream-background: #f4f2dd;
+  --footer-color: #e9e6d5;
+  --onyx:  #31343C;
+}
+
+.bg-color {
+  background-color: var(--cream-background);
+}
+/* syntax(--logo-color) */
+
 .form-group {
   margin-bottom: 20px;
 }
 
-/* Import preferred gogle font, or font squirrel
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(0, 0, 0, 0.87);
-  background-color: #ffffff;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+.footer-footer {
+  background-color: var(--footer-color);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+.top-spacing {
+  margin-top: 40px;
 }
-a:hover {
-  color: #535bf2;
+.botttom-spacing {
+  margin-bottom: 20px;
 }
 
-body {
-  margin: 0;
+/* Home page */
+.jumbotron {
+  width: 100%;
+  height: 60vh;
+  background-image: url('https://images.unsplash.com/photo-1567721971759-12402aedabf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+  background-size: cover;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+
+.center {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30vh;
+  margin-top: 30vh;
+  /* background-color: var(--cream-background) */
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* Navbar */
+.sticky-nav {
+  background-color: var(--cream-background);
+  position: -webkit-sticky;
+  position: sticky;
+  top: -5px;
+  z-index: 2;
+}
+
+.icon-center {
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+/* Font & Icon Styling  */
+.feature-icon {
+  font-size: 35px;
+  margin-right: 20px
+}
+
+.pacifico-bold {
+  font-family: 'Pacifico', cursive;
+  font-size: 70px;
+  color: var(--blood-orange);
+}
+
+.pacifico-reg {
+  font-family: 'Pacifico', cursive;
+  color: var(--blood-orange);
+}
+
+.onyx-reg {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx)
+}
+
+/* Shop styling */
+.shop-button {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx);
+  background-color: var(--blood-orange); 
+  padding: 10px 20px;
+  font-size: 17px;
+  text-align: center;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px  var(--logo-color);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+.shop-button:hover {
+  background-color: var(--cream-background);
+  color: var(--logo-color);
+}
+
+/* find way to edit blue after effect */
+.shop-button:after {
+  background-color: var(--cream-background);
+  box-shadow: 0 5px #fff9f9;
+  color: var(--blood-orange);
+  transform: translateY(4px);
+}
+
+.pagination {
+  color: var(--cream-background);
+}
+
+/* Cart styling */
+.cart-button {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx);
+  background-color: var(--blood-orange); 
+  padding: 10px 20px;
+  font-size: 17px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px  var(--logo-color);
+  margin-bottom: 20px;
+}
+.cart-button:after {
+  background-color: var(--cream-background);
+  box-shadow: 0 5px #fff9f9;
+  color: var(--blood-orange);
+  transform: translateY(4px);
+}
+
+.cart-button:hover {
+  background-color: var(--cream-background);
+  color: var(--logo-color);
+}
+
+

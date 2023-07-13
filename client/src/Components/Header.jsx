@@ -1,20 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
-// import { CgProfile,  FaBeer  } from "react-icons/fa";
-import { FaBeer } from "@react-icons/all-files/fa/FaBeer";
-// CgProfile, ImProfile (Profile)
-// GrCart, GiShoppingCart (Cart)
 import { CgUser, CgProfile } from "react-icons/cg";
-
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+// import { CgUser } from "react-icons/cg";
+import {FaJenkins, FaCcDiscover, FaFolderOpen, FaHandHoldingUsd, FaEdit} from "react-icons/fa";
+import {FaOpencart} from "react-icons/fa6"
+// , FaShoppingCart, FaCartShopping, FaRegUser
+import {TfiUser} from "react-icons/tfi";
+import { Link, useNavigate} from "react-router-dom";
+
 
 function Header() {
+  const navigate = useNavigate();
+  const handleProfile = () => {
+    navigate("/profile"); 
+  };
+
+  const handleCart = () => {
+    navigate("/cart")
+  }
+  // const handleModal = () => {
+  //   pass
+  // }
+
+
     return (
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar expand="lg" className="sticky-nav">
         <Container fluid>
           <Navbar.Brand href="/">
           <img 
@@ -61,10 +76,11 @@ function Header() {
               <Button variant="outline-success">Search</Button>
             </Form> */}
             {/* <Nav.Link href="#action2"><CgProfile/></Nav.Link> */}
-            <Nav.Link href="#action2">Profile</Nav.Link>
-            <Nav.Link href="#action2">Cart</Nav.Link>
-            <Nav.Link href="#action2">More</Nav.Link>
-
+            <ul className="icon-center">
+              <Nav.Link href="#" onClick={handleProfile}><TfiUser className="feature-icon" /></Nav.Link>
+              <Nav.Link href="#" onClick={handleCart}><FaOpencart className="feature-icon"/></Nav.Link>
+              <Nav.Link href="#action2"><FaFolderOpen className="feature-icon"/></Nav.Link>
+            </ul>
           </Navbar.Collapse>
         </Container>
       </Navbar>

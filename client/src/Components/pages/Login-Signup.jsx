@@ -4,8 +4,7 @@ import Login from '../login.jsx'
 import Signup from '../signup.jsx'
 import { Link } from "react-router-dom";
 import { Row, Col, Container, Button, Image } from "react-bootstrap";
-// import { Formik, Form, Field, ErrorMessage } from "formik";
-// import * as Yup from "yup";
+
 
 // Header, Footer, 2 buttons open forms and when pressed, open Login form or Signup form
 
@@ -24,6 +23,7 @@ function ProcessUser(){
         // setShowSignupForm(true);
         setShowSignupForm(!showSignupForm)
     };
+    
 // WIll use when cancel button functional
 // return (
 //     <Container>
