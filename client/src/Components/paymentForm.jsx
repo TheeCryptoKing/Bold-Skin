@@ -1,14 +1,121 @@
-import React, { useEffect, useState, useContext } from "react";
-import Context from "./Context";
+import React, { useState, useEffect, useContext } from "react";
+import { Card, Container, Row, Button, Form } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
-import { Card } from "react-bootstrap";
 import * as Yup from "yup";
-import { Button, Form } from "react-bootstrap";
+import Context from "./Context";
 
-function UserPaymentFrom({ onNext }) {
+
+function UserPaymentFrom() {
+// function PaymentDetails() {
   const { user } = useContext(Context);
-  const [paymentDetails, setPaymentDetails] = useState(null);
-  const [useCardOnRecord, setUseCardOnRecord] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState([]);
+  const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
+  const [selectedPaymentId, setSelectedPaymentId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  useEffect(() => {
+    fetch(`/api/payments/${user.id}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else if (response.status === 404) {
+          return [];
+        } else {
+          throw new Error("Error fetching payment details");
+        }
+      })
+      .then((payments) => {
+        setPaymentDetails(payments);
+        console.log(payments)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [user]);
+
+  const handleAddPayment = () => {
+    setShowAddPaymentForm(true);
+  };
+
+  const handleFormSubmit = (values) => {
+    if (selectedPaymentId) {
+      fetch(`/api/payments/${user.id}/${selectedPaymentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          if (response.ok) {
+            setPaymentDetails((prevPaymentDetails) =>
+              prevPaymentDetails.map((payment) =>
+                payment.id === selectedPaymentId
+                  ? { ...payment, ...values }
+                  : payment
+              )
+            );
+            setShowAddPaymentForm(false);
+          } else {
+            throw new Error("Error saving payment details");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      fetch(`/api/payments/${user.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          if (response.ok) {
+            setPaymentDetails((prevPaymentDetails) => [
+              ...prevPaymentDetails,
+              values,
+            ]);
+            setShowAddPaymentForm(false);
+          } else {
+            throw new Error("Error saving payment details");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedPaymentId) {
+      fetch(`/api/payments/${user.id}/${selectedPaymentId}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (response.ok) {
+            setPaymentDetails((prevPaymentDetails) =>
+              prevPaymentDetails.filter(
+                (payment) => payment.id !== selectedPaymentId
+              )
+            );
+            setSelectedPaymentId(null);
+            setShowDeleteModal(false);
+          } else {
+            throw new Error("Error deleting payment details");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setSelectedPaymentId(null);
+    setShowDeleteModal(false);
+  };
 
   const paymentValidationSchema = Yup.object().shape({
     cardholder_name: Yup.string().required("Cardholder name is required"),
@@ -25,61 +132,35 @@ function UserPaymentFrom({ onNext }) {
       .matches(/^\d{3}$/, "Invalid CVV"),
   });
 
-  useEffect(() => {
-    if (user) {
-      fetch(`/api/payments/${user.id}`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else if (response.status === 404) {
-            return [];
-          } else {
-            throw new Error("Error fetching payment details");
-          }
-        })
-        .then((payments) => {
-          console.log(payments)
-          setPaymentDetails(payments);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [user]);
-
-  const handleNext = (values) => {
-
-    fetch(`/api/payments/${user.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Error saving payment details");
-        }
-      })
-      .then((newPaymentInfo) => {
-        onNext();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const handleEditPayment = (paymentId) => {
+    setSelectedPaymentId(paymentId);
+    setShowAddPaymentForm(true);
   };
 
-  // if (!user) {
-  //   return null;
-  // }
+  const handleDeletePayment = (paymentId) => {
+    setSelectedPaymentId(paymentId);
+    setShowDeleteModal(true);
+  };
 
   return (
-    <div>
-      {!useCardOnRecord && paymentDetails && paymentDetails.length > 0 && (
-        <div>
-          <p>Would you like to use a card on record?</p>
+    <Container>
+      {paymentDetails.length === 0 ? (
+        <Row>
+          <p>
+            No payments on record. Add a payment?{" "}
+            <span onClick={handleAddPayment} className="payment-click">
+              Click Here
+            </span>
+          </p>
+        </Row>
+      ) : (
+        <Row>
+          <p>
+            Add a new payment?{" "}
+            <span onClick={handleAddPayment} className="payment-click">
+              Click Here
+            </span>
+          </p>
           {paymentDetails.map((paymentMethod) => (
             <Card key={paymentMethod.id} className="col-sm-4">
               <Card.Body>
@@ -90,129 +171,36 @@ function UserPaymentFrom({ onNext }) {
                     {paymentMethod.card_number.slice(-4)}
                   </Card.Text>
                 )}
+                <Button
+                  className="custom-btn-primary"
+                  onClick={() => handleEditPayment(paymentMethod.id)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  className="custom-btn-primary"
+                  onClick={() => handleDeletePayment(paymentMethod.id)}
+                >
+                  Delete
+                </Button>
               </Card.Body>
             </Card>
           ))}
-          <Button
-            className="custom-btn-primary checkout-button use-card"
-            onClick={() => onNext()}
-          >
-            Use Card on Record
+        </Row>
+      )}
+      {showDeleteModal && (
+        <div>
+          <p>Are you sure you want to delete this payment?</p>
+          <Button className="custom-btn-primary" onClick={handleConfirmDelete}>
+            Confirm
           </Button>
-          <Button
-            className="custom-btn-primary checkout-button"
-            onClick={() => setUseCardOnRecord(true)}
-          >
-            Enter New Payment
+          <Button className="custom-btn-primary" onClick={handleCancelDelete}>
+            Cancel
           </Button>
         </div>
       )}
-      {!useCardOnRecord && (!paymentDetails || paymentDetails.length === 0) && (
-        <Formik
-            initialValues={{
-              cardholder_name: "",
-              card_number: "",
-              expiration_month: "",
-              expiration_year: "",
-              cvv: "",
-            }}
-            validationSchema={paymentValidationSchema}
-            onSubmit={handleNext}
-          >
-            {({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
-                <Form.Group
-                  controlId="cardholder_name"
-                  className="payment-form-input"
-                >
-                  <Form.Label>Cardholder Name</Form.Label>
-                  <Field type="text" name="cardholder_name" as={Form.Control} />
-                  <ErrorMessage
-                    name="cardholder_name"
-                    component={Form.Text}
-                    className="text-danger"
-                  />
-                </Form.Group>
-
-                <Form.Group
-                  controlId="card_number"
-                  className="payment-form-input"
-                >
-                  <Form.Label>Card Number</Form.Label>
-                  <Field type="text" name="card_number" as={Form.Control} />
-                  <ErrorMessage
-                    name="card_number"
-                    component={Form.Text}
-                    className="text-danger"
-                  />
-                </Form.Group>
-
-                <Form.Group
-                  controlId="expiration_month"
-                  className="payment-form-input"
-                >
-                  <Form.Label>Expiration Month</Form.Label>
-                  <Field
-                    type="number"
-                    min="1"
-                    max="12"
-                    name="expiration_month"
-                    as={Form.Control}
-                  />
-                  <ErrorMessage
-                    name="expiration_month"
-                    component={Form.Text}
-                    className="text-danger"
-                  />
-                </Form.Group>
-
-                <Form.Group
-                  controlId="expiration_year"
-                  className="payment-form-input"
-                >
-                  <Form.Label>Expiration Year</Form.Label>
-                  <Field
-                    type="number"
-                    min={new Date().getFullYear()}
-                    name="expiration_year"
-                    as={Form.Control}
-                  />
-                  <ErrorMessage
-                    name="expiration_year"
-                    component={Form.Text}
-                    className="text-danger"
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="cvv" className="payment-form-input">
-                  <Form.Label>CVV</Form.Label>
-                  <Field
-                    type="password"
-                    pattern="\d{3}"
-                    name="cvv"
-                    as={Form.Control}
-                  />
-                  <ErrorMessage
-                    name="cvv"
-                    component={Form.Text}
-                    className="text-danger"
-                  />
-                </Form.Group>
-
-                <Button
-                  type="submit"
-                  className="custom-btn-primary payment-form-button"
-                >
-                  Add Payment
-                </Button>
-              </Form>
-            )}
-          </Formik>
-      )}
-
-      {useCardOnRecord && (
-        <div>
-          <p>Enter new payment details:</p>
+      {showAddPaymentForm && (
+        <Row>
           <Formik
             initialValues={{
               cardholder_name: "",
@@ -222,7 +210,7 @@ function UserPaymentFrom({ onNext }) {
               cvv: "",
             }}
             validationSchema={paymentValidationSchema}
-            onSubmit={handleNext}
+            onSubmit={handleFormSubmit}
           >
             {({ handleSubmit }) => (
               <Form onSubmit={handleSubmit}>
@@ -313,10 +301,11 @@ function UserPaymentFrom({ onNext }) {
               </Form>
             )}
           </Formik>
-        </div>
+        </Row>
       )}
-    </div>
+    </Container>
   );
 }
 
-export default UserPaymentFrom
+// export default PaymentDetails;
+export default UserPaymentFrom; 
