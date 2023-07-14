@@ -1,8 +1,8 @@
 """updating Tables
 
-Revision ID: 65371d57bc92
+Revision ID: ed77fe11fdbe
 Revises: 
-Create Date: 2023-07-11 16:46:03.481397
+Create Date: 2023-07-13 17:42:48.422997
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '65371d57bc92'
+revision = 'ed77fe11fdbe'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -78,8 +78,8 @@ def upgrade():
     sa.Column('expiration_year', sa.Integer(), nullable=False),
     sa.Column('cvv', sa.Integer(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('User', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['User'], ['users.id'], name=op.f('fk_payments_User_users')),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_payments_user_id_users')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_payments'))
     )
     op.create_table('products',

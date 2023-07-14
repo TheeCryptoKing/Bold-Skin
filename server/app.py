@@ -203,6 +203,7 @@ class UserOrders(Resource):
                     "status": order_status,
                     "created": order.created_at.isoformat() if order.created_at else None
                 })
+            return order_history, 200
         except Exception as e:
             traceback.print_exc()
             return {"error" : "Error while fetching order history", "message": str(e)}, 500
@@ -258,10 +259,10 @@ class UserPayments(Resource):
     @login_required
     def get(self, user_id):
         try:
-            u_payments = Payment.query.filter_by(user_id=user_id).all()
-            if u_payments:
+            user_payments = Payment.query.filter_by(user_id=user_id).all()
+            if user_payments:
                 payment_info = []
-                for payment in u_payments:
+                for payment in user_payments:
                     payment_info.append({
                         "id": payment.id,
                         "card_number": payment.card_number,
@@ -368,7 +369,7 @@ class UserAddress(Resource):
                     "address_city": address.address_city,
                     "address_state": address.address_state,
                     "address_postal": address.address_postal,
-                    "address_type": address.address_type_of
+                    "address_type_of": address.address_type_of
                 }
                 address_list.append(address_info)
             return address_list, 200
@@ -383,15 +384,16 @@ class UserAddress(Resource):
             address = Address(
                 user_id=user_id,
                 address_1=data.get('address_1'),
-                # Use empty string as default
                 address_2=data.get('address_2', ''),
                 address_city=data.get('address_city'),
                 address_state=data.get('address_state'),
                 address_postal=data.get('address_postal'),
                 address_type_of=data.get('address_type_of')
             )
+            
             db.session.add(address)
             db.session.commit()
+            
             address_info = {
                 'id': address.id,
                 'address_1': address.address_1,
@@ -402,6 +404,7 @@ class UserAddress(Resource):
                 'address_type_of': address.address_type_of
             }
             return address_info, 201
+        
         except Exception as e:
             traceback.print_exc()
             return {'Error': 'Error while creating User address', "message": str(e)}, 500
@@ -746,8 +749,6 @@ class Checkout(Resource):
 api.add_resource(Checkout, '/checkout')
 # Working
 
-# Endpoints list 
-# /login, /signup, checksesion, 
 
 
 

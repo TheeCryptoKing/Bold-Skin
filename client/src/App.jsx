@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 // import './Components/Header.jsx'
 import Home from './Components/pages/Home.jsx'
 import Shop from './Components/pages/Shop.jsx'
-// import ShopByCategory from './Components/pages/ShopByCategory'
+import OrderById from './Components/pages/OrderbyId.jsx'
 import Cart from './Components/pages/Cart.jsx'
+import Checkout from './Components/pages/Checkout.jsx'
 import Product from './Components/pages/Products.jsx'
 import Header from './Components/Header.jsx'
 import Footer from './Components/Footer.jsx'
@@ -41,8 +42,9 @@ useEffect(() => {
         <Route path="/profile" element={<ProfileDetails />} />
         <Route path="/product/:id" element={<Product />}/>
         <Route path='/shop' element={<Shop />}/>
-        {/* <Route path='/shop/:id' element={<ShopBycategory />}/> */}
+        <Route path='/order/:order_id' element={<OrderById />}/>
         <Route path='/cart' element={<Cart />}/>
+        <Route path='/checkout' element={<Checkout />}/>
       </Routes>
       </div>
       <Footer />

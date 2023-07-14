@@ -29,15 +29,15 @@ function Header() {
 
 
     return (
-      <Navbar expand="lg" className="sticky-nav">
+      <Navbar expand="md" className="sticky-nav">
         <Container fluid>
           <Navbar.Brand href="/">
           <img 
             className="brandLogo"
             alt="Bold Skin"
             src="https://raw.githubusercontent.com/TheeCryptoKing/Bold-Skin/main/assets/Products/BoldSkin/BoldSkinLogo.png"
-            width= "175px"
-            height="125px"
+            width= "155px"
+            height="105px"
           />
           </Navbar.Brand>
           {/* <Navbar.Toggle aria-controls="navbarScroll" /> */}

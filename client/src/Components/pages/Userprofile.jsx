@@ -4,8 +4,8 @@ import { Container, Table, Row, Col, Button } from "react-bootstrap";
 import { Link, useNavigate} from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-// import AddressForm from "../addressForm.jsx";
-// import PaymentDetails from "../paymentForm.jsx";
+import AddressForm from "../addressForm.jsx";
+import UserPaymentFrom from "../paymentForm.jsx";
 
 function ProfileDetails() {
   const { user, setUser } = useContext(Context);
@@ -13,36 +13,69 @@ function ProfileDetails() {
   const [orders, setOrders] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showAccountEdit, setAccountEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
-//   useEffect(() => {
-//     fetch("/api/user/orders")
-//       .then((r) => r.json())
-//       .then((orders) => {
-//         setOrders(orders);
-//         // only works with this break
-//         // print(orders)
-//       });
-//   }, [user]);
-// Need to get order data 
-// if (!user) {
-//     return <div>Loading...</div>;
-//   }
-
-// Neede
-
-useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
+  useEffect(() => {
+    fetch("/api/user/orders")
+      .then((r) => r.json())
+      .then((orders) => {
+        setOrders(orders);
+        setLoading(false); 
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false); 
+      });
   }, [user, navigate]);
 
-//   data is undefined 
-  const { name, username, email, id } = user ;
+  // combining useeffect breaks page
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   } else {
+  //     console.log(user, user.name);
+  //     fetch("/api/user/orders")
+  //       .then((response) => response.json())
+  //       .then((orders) => {
+  //         setOrders(orders);
+  //         setLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         setLoading(false);
+  //       });
+  //   }
+  // }, [user, navigate]);
+// Checks for user if false navigates to signup
+  // useEffect(() => {
+  //     if (!user) {
+  //       navigate("/login");
+  //     } else {
+  //       console.log(user, user.name)
+  //     }
+  //   }, [user, navigate]);
+
+// const handleLogout = () => {
+//   fetch('/api/logout', {
+//     method: 'POST',
+//     credentials: 'include',
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       setUser(null);
+//       navigate('/login');
+//     })
+//     .catch(error => console.error(error));
+// };
+
+
+//   data is returning as null line 46undefined 
+  // const { name, username, email, id } = user ;
 
   const handleDeleteConfirmation = () => {
     setShowConfirmation(true);
@@ -101,9 +134,12 @@ useEffect(() => {
 // Need flex box grid layout
   return (
     <Container >
+    {/* <Button className="text-align" onClick={handleLogout}>Logout</Button> */}
       <Row className="center">
         <h3>Welcome</h3>
-        <h4>Hello, {name}</h4>
+        {/* <h4>Hello, {name}</h4> */}
+        {/* <h5>{username}</h5>
+        <h5>{email}</h5> */}
         <p>
             View your order history and update personal Your details.
             Let us know any way we can assist you!
@@ -191,17 +227,17 @@ useEffect(() => {
       <Row>
         <h4>Payment Details</h4>
         <hr />
-        {/* <PaymentDetails /> */}
+        <UserPaymentFrom />
       </Row>
       <Row>
         <h4>Addresses</h4>
         <hr />
-        {/* <AddressForm /> */}
+        <AddressForm />
       </Row>
       <Row>
         <h3>Order History</h3>
         <hr />
-        <Table striped bordered hover>
+        <Table>
           <thead>
             <tr>
               <th>Order #</th>
@@ -211,35 +247,43 @@ useEffect(() => {
               <th></th>
             </tr>
           </thead>
-          {/* <tbody>{orderData}</tbody> */}
+          {orders && orders.length > 0 ? (
+            <tbody>{orderData}</tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan="5">No orders found</td>
+              </tr>
+            </tbody>
+          )}
         </Table>
       </Row>
-      {/* <Row className="text-align center">
+      <Row className="center ">
         <h3>Now longer a Fan of BoldSKin?</h3>
         <hr />
         {showConfirmation ? (
           <>
             <p>Are you sure you want to delete your account?</p>
             <Button
-              className="user-delete"
+              className=""
               variant="success"
               onClick={handleYes}
             >
               Yes
             </Button>
-            <Button className="user-delete" variant="danger" onClick={handleNo}>
+            <Button className="" variant="danger" onClick={handleNo}>
               No
             </Button>
           </>
         ) : (
           <Button
-            className="custom-btn-primary user-delete"
+            className=""
             onClick={handleDeleteConfirmation}
           >
             Delete Account
           </Button>
         )}
-      </Row> */}
+      </Row>
     </Container>
   );
 }

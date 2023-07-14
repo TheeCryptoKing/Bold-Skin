@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Table, Row, Button } from "react-bootstrap";
 
 function OrderById() {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(Context);
   const [order, setOrder] = useState(null);
   const { order_id } = useParams();
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ function OrderById() {
   }, [order_id]);
 
   if (!order) {
-    return <div>Loading...</div>;
+    return <div className='center'>Loading...</div>;
   }
 
   const showConfirmation = () => {
@@ -40,7 +40,7 @@ function OrderById() {
     fetch(`/api/user/orders/${order_id}`, {
       method: "DELETE",
     }).then(() => {
-      navigate("/profile-details");
+      navigate("/profile");
     });
   };
 
@@ -59,7 +59,7 @@ function OrderById() {
   });
 
   const backToProfile = () => {
-    navigate("/profile-details")
+    navigate("/profile")
   }
 
   return (

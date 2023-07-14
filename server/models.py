@@ -256,7 +256,7 @@ class Payment(db.Model, SerializerMixin):
     ####################### DateTime Specfics
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     ####################### FK
-    user_id = db.Column("User",db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ####################### Relationships
     user = db.relationship("User", back_populates='payments')
     ######################## Validation & Serialization
@@ -387,7 +387,7 @@ class Address(db.Model, SerializerMixin):
     ####################### Relationships
     user = db.relationship("User", back_populates="addresses")
     ######################## Validation & Serialization
-    serialize_rules = ("-user","-user.addresses")
+    serialize_rules = ("-user",)
     @validates('address_postal')
     def validate_address_postal(self, key, address_postal):
         pattern = r'^\d{5}$'
