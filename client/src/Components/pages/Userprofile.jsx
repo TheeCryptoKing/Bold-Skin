@@ -13,7 +13,6 @@ function ProfileDetails() {
   const [orders, setOrders] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showAccountEdit, setAccountEdit] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -25,42 +24,38 @@ function ProfileDetails() {
       .then((r) => r.json())
       .then((orders) => {
         setOrders(orders);
-        setLoading(false); 
       })
       .catch((error) => {
         console.error(error);
-        setLoading(false); 
       });
-  }, [user, navigate]);
+  }, [user]);
 
-  // combining useeffect breaks page
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   } else {
-  //     console.log(user, user.name);
-  //     fetch("/api/user/orders")
-  //       .then((response) => response.json())
-  //       .then((orders) => {
-  //         setOrders(orders);
-  //         setLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //         setLoading(false);
-  //       });
-  //   }
-  // }, [user, navigate]);
-// Checks for user if false navigates to signup
-  // useEffect(() => {
-  //     if (!user) {
-  //       navigate("/login");
-  //     } else {
-  //       console.log(user, user.name)
-  //     }
-  //   }, [user, navigate]);
+  if (!user) {
+    return navigate("/login");
+  }
+  
+const handleYes = () => {
+  fetch(`/api/users`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        setUser(null);
+        navigate("/");
+      } else {
+        throw new Error("Error confirming the order");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
 // const handleLogout = () => {
+//   if (user) {
 //   fetch('/api/logout', {
 //     method: 'POST',
 //     credentials: 'include',
@@ -68,14 +63,11 @@ function ProfileDetails() {
 //     .then(response => response.json())
 //     .then(data => {
 //       setUser(null);
-//       navigate('/login');
+//       navigate("/");
 //     })
-//     .catch(error => console.error(error));
+//     navigate("/login")
 // };
-
-
-//   data is returning as null line 46undefined 
-  // const { name, username, email, id } = user ;
+// }
 
   const handleDeleteConfirmation = () => {
     setShowConfirmation(true);
@@ -84,31 +76,10 @@ function ProfileDetails() {
   const handleAccountEdit = () => {
     setAccountEdit((prev) => !prev);
   };
-// might need to add ${id} here if more problems
-  const handleYes = () => {
-    fetch(`/api/users`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          setUser(null);
-          navigate("/");
-        } else {
-          throw new Error("Error confirming the order");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
   const handleNo = () => {
     setShowConfirmation(false);
   };
-// Error in this above area
 
   const orderData = orders.map((order) => {
     const date = new Date(order.created);
@@ -131,15 +102,14 @@ function ProfileDetails() {
     );
   });
 
-// Need flex box grid layout
   return (
     <Container >
     {/* <Button className="text-align" onClick={handleLogout}>Logout</Button> */}
       <Row className="center">
-        <h3>Welcome</h3>
-        {/* <h4>Hello, {name}</h4> */}
-        {/* <h5>{username}</h5>
-        <h5>{email}</h5> */}
+          <h3>Welcome</h3>
+          <h3>Hello,{user.name}</h3>
+          <h3>{user.username}</h3>
+          <h3>{user.email}</h3>
         <p>
             View your order history and update personal Your details.
             Let us know any way we can assist you!
@@ -258,7 +228,7 @@ function ProfileDetails() {
           )}
         </Table>
       </Row>
-      <Row className="center ">
+      {/* <Row className="center ">
         <h3>Now longer a Fan of BoldSKin?</h3>
         <hr />
         {showConfirmation ? (
@@ -283,7 +253,7 @@ function ProfileDetails() {
             Delete Account
           </Button>
         )}
-      </Row>
+      </Row> */}
     </Container>
   );
 }

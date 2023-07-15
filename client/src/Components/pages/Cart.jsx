@@ -7,6 +7,7 @@ function EditableQuantityField({ productId, quantity, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedQuantity, setEditedQuantity] = useState(quantity);
 
+
   const handleSaveClick = () => {
     setIsEditing(false);
     onSave(productId, editedQuantity);
@@ -145,11 +146,11 @@ function Cart() {
   };
 
   if (cart === null) {
-    return <div className="center">...Loading</div>;
+    return <div className="center base-text">...Please Log In</div>;
   }
 
   if (cart.length === 0) {
-    return <div>Your cart is empty.</div>;
+    return <div className="base-text">Your cart is empty.</div>;
   }
 
   return (

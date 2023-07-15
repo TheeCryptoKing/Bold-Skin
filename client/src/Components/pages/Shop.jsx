@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import ProductCard from "../ProductCard.jsx";
-import { Row, Col, Container, Button } from "react-bootstrap";
+import Context from '../Context'
+import { Row, Col, Container, Button, Navbar } from "react-bootstrap";
 
 
 function Shop() {
+    const { user } = useContext(Context);
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -22,6 +24,7 @@ function Shop() {
           console.error("Error fetching products:", error);
         });
     }, []);
+
   
     // Filter products based on name search update of searchquery
     const filterProducts = () => {
@@ -68,78 +71,72 @@ function Shop() {
     const handlePriceRangeChange = (priceRange) => {
       setSelectedPriceRange(selectedPriceRange === priceRange ? "" : priceRange);
     };
-  
+    
+
     return (
       <>
-      <Container>
-          <Col md={5}>
-            <input
+          <Navbar expand='md'className="navbar-text me-auto">
+            <Container className="shop-nav">
+              <Navbar.Toggle />
+              <Navbar.Text
+                onClick={() => handleCategoryChange("Face")}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCategory === "Face" ? "bold" : "normal",
+                }}
+              >Face</Navbar.Text>
+              <Navbar.Text
+              onClick={() => handleCategoryChange("Beard")}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCategory === "Beard" ? "bold" : "normal",
+                }}
+              >Beard</Navbar.Text>
+              <Navbar.Text
+              onClick={() => handleCategoryChange("Hair Growth")}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCategory === "Hair Growth" ? "bold" : "normal",
+                }}
+              >Hair Growth</Navbar.Text>
+              <Navbar.Text
+              onClick={() => handleCategoryChange("Body")}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCategory === "Body" ? "bold" : "normal",
+                }}
+              >Body</Navbar.Text>
+              <Navbar.Text
+              onClick={() => handleCategoryChange("Hair")}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCategory === "Hair" ? "bold" : "normal",
+                }}
+              >
+              Hair</Navbar.Text>
+              <Navbar.Text
+              onClick={() => handleCategoryChange("Merch")}
+                style={{
+                  cursor: "pointer",
+                  fontWeight: selectedCategory === "Merch" ? "bold" : "normal",
+                }}
+              >
+              Merch</Navbar.Text>
+              </Container>
+          </Navbar>
+      <Container className="product-margining">
+          <Col>
+            <div className="filter-options">
+              <input
               type="text"
               placeholder="Search..."
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-control mr-2"
-            />
-            <hr />
-            <h5 className="filter-heading">Categories</h5>
-            <div className="filter-options">
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  className="filter-checkbox"
-                  checked={selectedCategory === "Hair"}
-                  onChange={() => handleCategoryChange("Hair")}
-                />
-                Hair
-              </label>
-              {/* <label className="filter-option">
-                <input
-                  type="checkbox"
-                  className="filter-checkbox"
-                  checked={selectedCategory === "Beard"}
-                  onChange={() => handleCategoryChange("Beard")}
-                />
-                Beard
-              </label>  */}
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  className="filter-checkbox"
-                  checked={selectedCategory === "Body"}
-                  onChange={() => handleCategoryChange("Body")}
-                />
-                Body
-              </label> 
-              {/* <label className="filter-option">
-                <input
-                  type="checkbox"
-                  className="filter-checkbox"
-                  checked={selectedCategory === "Face"}
-                  onChange={() => handleCategoryChange("Face")}
-                />
-                Face
-              </label>  */}
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  className="filter-checkbox"
-                  checked={selectedCategory === "Merch"}
-                  onChange={() => handleCategoryChange("Merch")}
-                />
-                Merch 
-              </label>
-              {/* <label className="filter-option">
-                <input
-                  type="checkbox"
-                  className="filter-checkbox"
-                  checked={selectedCategory === "Hair Growth"}
-                  onChange={() => handleCategoryChange("Hair Growth")}
-                />
-                Hair Growth
-              </label> */}
+              className="form-control search"
+              />
             </div>
-            <hr />
+            {/* <hr /> */}
           </Col>
-          <Col md={8}>
+          <Col>
             <ProductCard products={filteredProducts}  searchQuery={searchQuery} />
           </Col>
       </Container>

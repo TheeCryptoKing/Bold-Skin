@@ -9,6 +9,11 @@
   --onyx:  #31343C;
 }
 
+.dark-mode {
+  background-color: black;
+  color: var(--cream-background);
+}
+
 .bg-color {
   background-color: var(--cream-background);
 }
@@ -147,6 +152,137 @@
 .cart-button:hover {
   background-color: var(--cream-background);
   color: var(--logo-color);
+}
+
+.search {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.navbar-text {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: 100vw;
+  height: 50px;
+  background-color: var(--cream-background);
+  text-align: center;
+  color: var(--logo-color);
+  font-family: 'Pacifico', cursive;
+
+}
+
+.product-margining {
+  margin: 50px;
+  /* padding-bottom: 20px; */
+}
+
+
+/* Product Card */
+
+
+/* Cart */
+.base-text {
+  font-family: 'Pacifico', cursive;
+  color: var(--logo-color)
+}
+
+
+/* Loading screen Animation */
+.loading {
+  margin: 0;
+  padding: 0;
+  font-family: 'Pacifico', cursive;
+  font-weight: 100;
+  font-size: 1.1em; 
+  position: absolute;
+  text-transform: uppercase;  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fe5f55;
+}
+
+.full-height {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* gonna change to another tag */
+/* span {
+  position: relative;
+  top: 0.63em;  
+  display: inline-block;
+  text-transform: uppercase;  
+  opacity: 0;
+  transform: rotateX(-90deg);
+} */
+
+.let1 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.let2 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.3s;
+}
+
+.let3 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.4s;
+}
+
+.let4 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.5s;
+
+}
+
+.let5 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.6s;
+}
+
+.let6 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.7s;
+}
+
+.let7 {
+  font-family: 'Pacifico', cursive;
+  animation: drop 1.2s ease-in-out infinite;
+  animation-delay: 1.8s;
+}
+
+@keyframes drop {
+    10% {
+        opacity: 0.5;
+    }
+    20% {
+        opacity: 1;
+        top: 3.78em;
+        transform: rotateX(-360deg);
+    }
+    80% {
+        opacity: 1;
+        top: 3.78em;
+        transform: rotateX(-360deg);
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        top: 6.94em
+    }
 }
 
 
