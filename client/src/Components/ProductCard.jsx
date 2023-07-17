@@ -88,7 +88,7 @@ function ProductCard({ products, searchQuery }) {
         const quantity = quantities[index] || 1;
 
         if (isInCart(product.id)) {
-        return <Button className="add-to-cart" disabled style={{ backgroundColor: '#599872', borderColor: '#599872' ,cursor: 'not-allowed' }}>In Cart</Button>;
+        return <Button disabled style={{ padding: '1vh',backgroundColor: '#fe5f55', borderColor: '#f4f2dd' , color: '#f4f2dd', font: "'Pacifico', cursive;" ,cursor: 'not-allowed' }}>In Cart</Button>;
         } else {
         return (
             <>                    
@@ -98,7 +98,7 @@ function ProductCard({ products, searchQuery }) {
             value={quantity}
             onChange={(event) => handleQuantityChange(index, event)}
             />
-            <Button className="shop-button" onClick={() => addToCart(product, quantity)}>
+            <Button className="edit-profile-button" onClick={() => addToCart(product, quantity)}>
             Add to Cart
             </Button>
             </>
@@ -179,34 +179,38 @@ function ProductCard({ products, searchQuery }) {
             disabled={currentPage === totalPages}
         />
         );
-
         return paginationItems;
     };
 
     return (
         <div>
-        <div className="row justify-content-center">
+        <div className="row ">
             {currentProducts.map((product, index) => {
             const url = `/product/${product.id}`;
             const quantity = quantities[index] || 1;
 
             return (
-                <Card className="col-sm-3 product-cards" key={product.id}>
+                <Card className="col-sm-3 card-animation product-margining" key={product.id}>
                 <Link to={url}>
-                    <Card.Img variant="top" src={product.image_1} />
+                    <Card.Img src={product.image_1} className='card-img'/>
                 </Link>
-                <Card.Body>
+                <Card.Body >
                     <Link
                     to={url}
-                    style={{ textDecoration: "none", color: "#000" }}
+                    style={{  textDecoration: "none", color: "#31343C" }}
                     >
-                    <Card.Subtitle>{product.name}</Card.Subtitle>
+                    <Card.Subtitle className=' d-flex justify-content-center align-items-center smMT'>{product.name}</Card.Subtitle>
                     </Link>
+                    {/* <hr /> */}
+                    <h3></h3>
+                    <Card.Subtitle className='d-flex justify-content-center align-items-center smMB'>${product.price}</Card.Subtitle>
                     <hr />
-                    <Card.Subtitle>${product.price}</Card.Subtitle>
                     {user ? (
                     <div className="d-flex justify-content-center align-items-center">
-                        {renderAddToCartButton(product, index)}
+                    
+                        {renderAddToCartButton(
+                            product,
+                            index)}
                     </div>
                     ) : (
                     <></>
@@ -216,10 +220,36 @@ function ProductCard({ products, searchQuery }) {
             );
             })}
         </div>
-        <div className="pagination-container d-flex justify-content-center">
-            <Pagination className="custom-pagination">
-            {renderPaginationItems()}
-            </Pagination>
+        <div className="">
+            <div className="pagination justify-content-center align-items-center mdMT mdMB">
+                <a 
+                className={currentPage === 1 ? 'active' : ''} 
+                onClick={() => handlePageChange(1)}
+                >
+                First
+                </a>
+                {currentPage > 1 && (
+                <a onClick={() => handlePageChange(currentPage - 1)}>&laquo;</a>
+                )}
+                {Array.from({ length: totalPages }, (_, index) => (
+                <a
+                    key={index}
+                    className={currentPage === index + 1 ? 'active' : ''}
+                    onClick={() => handlePageChange(index + 1)}
+                >
+                    {index + 1}
+                </a>
+                ))}
+                {currentPage < totalPages && (
+                <a onClick={() => handlePageChange(currentPage + 1)}>&raquo;</a>
+                )}
+                <a
+                className={currentPage === totalPages ? 'active' : ''}
+                onClick={() => handlePageChange(totalPages)}
+                >
+                Last
+                </a>
+            </div>
         </div>
         </div>
     );

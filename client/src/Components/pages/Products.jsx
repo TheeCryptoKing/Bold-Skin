@@ -235,6 +235,7 @@ function Product() {
             )}
             </div>
         </Col>
+        {/* Review/ Comments/ section */}
         </Row>
         )}
         </Container>

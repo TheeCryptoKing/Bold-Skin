@@ -74,9 +74,9 @@ function Shop() {
     
 
     return (
+      
       <>
-          <Navbar expand='md'className="navbar-text me-auto">
-            <Container className="shop-nav">
+          <Navbar className=" navbar-text">
               <Navbar.Toggle />
               <Navbar.Text
                 onClick={() => handleCategoryChange("Face")}
@@ -122,23 +122,21 @@ function Shop() {
                 }}
               >
               Merch</Navbar.Text>
-              </Container>
           </Navbar>
-      <Container className="product-margining">
+      <Container>
+      <Row >
           <Col>
-            <div className="filter-options">
+            <div className="search-center"> 
               <input
               type="text"
               placeholder="Search..."
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-control search"
+              className="search align-items-center"
               />
             </div>
-            {/* <hr /> */}
-          </Col>
-          <Col>
             <ProductCard products={filteredProducts}  searchQuery={searchQuery} />
           </Col>
+          </Row>
       </Container>
       </>
     );
