@@ -34,7 +34,7 @@ function UserPaymentFrom() {
   }, [user]);
 
   const handleAddPayment = () => {
-    setShowAddPaymentForm(true);
+    setShowAddPaymentForm(!showAddPaymentForm);
   };
 
   const handleFormSubmit = (values) => {
@@ -291,13 +291,22 @@ function UserPaymentFrom() {
                     className="text-danger"
                   />
                 </Form.Group>
-
+                <h3></h3>
                 <Button
                   type="submit"
-                  className="custom-btn-primary payment-form-button"
+                  className="shop-button"
                 >
                   Add Payment
                 </Button>
+                <h3></h3>
+                {/* <Button
+                  type="submit"
+                  className="shop-button"
+                  onclick={showAddPaymentForm}
+                >
+                  Cancel
+                </Button> */}
+                <h3></h3>
               </Form>
             )}
           </Formik>

@@ -12,6 +12,7 @@ import Footer from './Components/Footer.jsx'
 import ProfileDetails from './Components/pages/Userprofile.jsx'
 import ProcessUser from './Components/pages/Login-Signup.jsx'
 import Context from './Components/Context.jsx'
+import EditProfile from './Components/pages/EditProfile.jsx'
 import 'bootstrap/dist/css/bootstrap.css';
 import './stylesheet/index.css'
 import LoadingAnimation from './Components/LoadingAnimation';
@@ -35,8 +36,6 @@ useEffect(() => {
   }, 2000);
 }, []);
 
-
-
   return (
     <Context.Provider value={{user, setUser}}>
     <div className="app-container ">
@@ -55,6 +54,7 @@ useEffect(() => {
             <Route path='/order/:order_id' element={<OrderById />}/>
             <Route path='/cart' element={<Cart />}/>
             <Route path='/checkout' element={<Checkout />}/>
+            <Route path='/editprofile' element={<EditProfile/>}/>
           </Routes>
       </div>
       )}

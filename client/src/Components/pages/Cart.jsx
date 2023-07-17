@@ -146,7 +146,7 @@ function Cart() {
   };
 
   if (cart === null) {
-    return <div className="center base-text">...Please Log In</div>;
+    return <div className="center base-text">...Loading</div>;
   }
 
   if (cart.length === 0) {

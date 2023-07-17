@@ -44,7 +44,7 @@ function Header() {
             <ul className="icon-center">
               <Nav.Link href="#" onClick={handleProfile}><TfiUser className="feature-icon" /></Nav.Link>
               <Nav.Link href="#" onClick={handleCart}><FaOpencart className="feature-icon"/></Nav.Link>
-              <Nav.Link href="#action2"><FaFolderOpen className="feature-icon"/></Nav.Link>
+              {/* <Nav.Link href="#action2"><FaFolderOpen className="feature-icon"/></Nav.Link> */}
             </ul>
           </Navbar.Collapse>
         </Container>

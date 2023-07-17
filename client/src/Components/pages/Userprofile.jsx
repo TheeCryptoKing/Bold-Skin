@@ -34,6 +34,11 @@ function ProfileDetails() {
     return navigate("/login");
   }
   
+  const handleEditProfile = () => {
+    navigate("/editprofile");
+  };
+
+
 const handleYes = () => {
   fetch(`/api/users`, {
     method: "DELETE",
@@ -54,20 +59,20 @@ const handleYes = () => {
     });
 };
 
-// const handleLogout = () => {
-//   if (user) {
-//   fetch('/api/logout', {
-//     method: 'POST',
-//     credentials: 'include',
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       setUser(null);
-//       navigate("/");
-//     })
-//     navigate("/login")
-// };
-// }
+const handleLogout = () => {
+  if (user) {
+  fetch('/api/logout', {
+    method: 'POST',
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(data => {
+      setUser(null);
+      navigate("/");
+    })
+    navigate("/login")
+};
+}
 
   const handleDeleteConfirmation = () => {
     setShowConfirmation(true);
@@ -101,160 +106,186 @@ const handleYes = () => {
       </tr>
     );
   });
+// row = 12 col | col md={2} takes up 2 rows
 
   return (
-    <Container >
-    {/* <Button className="text-align" onClick={handleLogout}>Logout</Button> */}
-      <Row className="center">
-          <h3>Welcome</h3>
-          <h3>Hello,{user.name}</h3>
-          <h3>{user.username}</h3>
-          <h3>{user.email}</h3>
-        <p>
-            View your order history and update personal Your details.
-            Let us know any way we can assist you!
-        </p>
-        {showAccountEdit ? (
-          <>
-            <Formik
-              initialValues={{ email: user.email, password: "" }}
-              validationSchema={validationSchema}
-              onSubmit={(values) => {
-                fetch("/api/users", {
-                  method: "PATCH",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    email: values.email,
-                    password: values.password,
-                  }),
-                })
-                  .then((response) => {
-                    if (response.ok) {
-                    } else {
-                      throw new Error("Error updating email and password");
-                    }
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                  });
-              }}
-            >
-              <Form>
-                <h4>Edit Email and Password</h4>
-                <hr />
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">
-                    Email:
-                  </label>
-                  <Field
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="edit-form"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">
-                    Password:
-                  </label>
-                  <Field
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="edit-form"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="error-message"
-                  />
-                </div>
-                <Button type="submit" className="custom-btn-primary">
-                  Update
-                </Button>
-                <Button variant="danger" onClick={handleAccountEdit}>
-                  Cancel
-                </Button>
-              </Form>
-            </Formik>
-          </>
-        ) : (
+    <div>
+      <Container >
+        <Row className="user-info">
+        <Col>
+          <h3>Welcome,</h3>
+            <h3>{user.username}</h3>
+            <h3>{user.name}</h3>
+            <h3>{user.email}</h3>
           <p>
-            Need to Provide or edit your account details?{" "}
-            <span onClick={handleAccountEdit} className="edit-click">
-              Click Here
-            </span>
+              View your order history and update personal Your details.
+              Let us know any way we can assist you!
           </p>
-        )}
-      </Row>
-      <Row>
-        <h4>Payment Details</h4>
-        <hr />
-        <UserPaymentFrom />
-      </Row>
-      <Row>
-        <h4>Addresses</h4>
-        <hr />
-        <AddressForm />
-      </Row>
-      <Row>
-        <h3>Order History</h3>
-        <hr />
-        <Table>
-          <thead>
-            <tr>
-              <th>Order #</th>
-              <th>Order Date</th>
-              <th>Total</th>
-              <th>Order Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          {orders && orders.length > 0 ? (
-            <tbody>{orderData}</tbody>
+          <Button className="edit-profile-button" onClick={handleLogout}>Logout</Button>
+          </Col>
+          <Col>
+          <Button className="profile-button" onClick={handleEditProfile}>
+          Edit Profile Details
+          </Button>
+          {/* {showAccountEdit ? (
+            <>
+              <Formik
+                initialValues={{ email: user.email, password: "" }}
+                validationSchema={validationSchema}
+                onSubmit={(values) => {
+                  fetch("/api/users", {
+                    method: "PATCH",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      email: values.email,
+                      password: values.password,
+                    }),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                      } else {
+                        throw new Error("Error updating email and password");
+                      }
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                }}
+              >
+              
+                <Form>
+                  <h4>Edit Email and Password</h4>
+                  <hr />
+                  <div className="form-group">
+                    <label htmlFor="email" className="form-label">
+                      Email:
+                    </label>
+                    <Field
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="edit-form"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="password" className="form-label">
+                      Password:
+                    </label>
+                    <Field
+                      type="password"
+                      id="password"
+                      name="password"
+                      className="edit-form"
+                    />
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+                  <Button type="submit" className="custom-btn-primary">
+                    Update
+                  </Button>
+                  <Button variant="danger" onClick={handleAccountEdit}>
+                    Cancel
+                  </Button>
+                </Form>
+              </Formik>
+              
+            </>
           ) : (
-            <tbody>
-              <tr>
-                <td colSpan="5">No orders found</td>
-              </tr>
-            </tbody>
-          )}
-        </Table>
-      </Row>
-      {/* <Row className="center ">
-        <h3>Now longer a Fan of BoldSKin?</h3>
+            <p>
+              Need to Provide or edit your account details?{" "}
+              <span onClick={handleAccountEdit} className="edit-click">
+                Click Here
+              </span>
+            </p>
+          )} */}
+          </Col>
+        {/* </Row>
+        <Row>
+          <h4>Payment Details</h4>
+          <hr />
+          <UserPaymentFrom />
+        </Row>
+        <Row>
+          <h4>Addresses</h4>
+          <hr />
+          <AddressForm />
+        </Row>
+        <Row> */}
+        <div className="order-history">
         <hr />
-        {showConfirmation ? (
-          <>
-            <p>Are you sure you want to delete your account?</p>
+          <h3>Order History</h3>
+          <hr />
+          <Table>
+            <thead>
+              <tr>
+                <th>Confirmation Num.</th>
+                <th>Order Date</th>
+                <th>Total</th>
+                <th>Order Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            {orders && orders.length > 0 ? (
+              <tbody>{orderData}</tbody>
+            ) : (
+              <tbody>
+                <tr>
+                  <td colSpan="5">No orders found</td>
+                </tr>
+              </tbody>
+            )}
+          </Table>
+          </div>
+        </Row>
+
+        {/* <Row className="center ">
+          <h3>Now longer a Fan of BoldSKin?</h3>
+          <hr />
+          {showConfirmation ? (
+            <>
+              <p>Are you sure you want to delete your account?</p>
+              <Button
+                className=""
+                variant="success"
+                onClick={handleYes}
+              >
+                Yes
+              </Button>
+              <Button className="" variant="danger" onClick={handleNo}>
+                No
+              </Button>
+            </>
+          ) : (
             <Button
               className=""
-              variant="success"
-              onClick={handleYes}
+              onClick={handleDeleteConfirmation}
             >
-              Yes
+              Delete Account
             </Button>
-            <Button className="" variant="danger" onClick={handleNo}>
-              No
-            </Button>
-          </>
-        ) : (
-          <Button
-            className=""
-            onClick={handleDeleteConfirmation}
-          >
-            Delete Account
-          </Button>
-        )}
-      </Row> */}
-    </Container>
+          )}
+        </Row> */}
+      </Container>
+    <div className="review-section">
+      <h3>Reviews</h3>
+      <hr />
+      <Table>
+            <tr >
+              <th> No current Reviews </th>
+            </tr>
+        </Table>
+        <hr />
+      </div>
+    </div>
   );
 }
 

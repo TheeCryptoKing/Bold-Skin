@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Card, Container, Row, Button, Form } from "react-bootstrap";
+import { Container, Row, Button, Form } from "react-bootstrap";
+import Card from 'react-bootstrap/Card';
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Context from "./Context";
@@ -31,7 +32,7 @@ function AddressForm() {
   }, [user]);
 
   const handleAddAddress = () => {
-    setShowAddAddressForm(true);
+    setShowAddAddressForm(!showAddAddressForm);
   };
 
   const handleEditAddress = (addressId) => {
@@ -137,40 +138,41 @@ function AddressForm() {
       {addressDetails && addressDetails.length === 0 ? (
         <Row>
           <p>
-            No addresses on record. Add an address?{" "}
-            <span onClick={handleAddAddress} className="address-click">
+            No addresses on record. Add an address?
+            <Button onClick={handleAddAddress} className="edit-profile-button">
               Click Here
-            </span>
+            </Button>
           </p>
         </Row>
       ) : (
         <Row>
-          <p>
-            Add a new address?{" "}
-            <span onClick={handleAddAddress} className="address-click">
-              Click Here
-            </span>
-          </p>
           {addressDetails.map((address) => (
-            <Card key={address.id} className="col-sm-4">
+            <Card key={address.id} className="" style={{ width: '15rem' }}>
               <Card.Body>
                 <Card.Title>
                   {address.address_1}
-                  {address.address_2}
                 </Card.Title>
-                <Card.Text>
-                  {address.address_city}, {address.address_state}, {address.address_postal}
+                <Card.Subtitle className="mb-2 text-muted">{address.address_2}</Card.Subtitle>
+                <Card.Text className="mb-2 text-muted">
+                <Card.Text></Card.Text>
+                  City: {address.address_city},
+                  <br/> State: {address.address_state}, 
+                  <br /> Zip: {address.address_postal}
                   <br />
-                  Address Type: {address.address_type_of}
+                  Type: {address.address_type_of}
                 </Card.Text>
+                <Card.Text></Card.Text>
+                <Card.Text></Card.Text>
+                <Card.Text></Card.Text>
+                <Card.Text></Card.Text>
                 <Button
-                  className="custom-btn-primary"
+                  className="edit-profile-button"
                   onClick={() => handleEditAddress(address.id)}
                 >
                   Edit
                 </Button>
                 <Button
-                  className="custom-btn-primary"
+                  className="edit-profile-button"
                   onClick={() => handleDeleteAddress(address.id)}
                 >
                   Delete
@@ -183,14 +185,19 @@ function AddressForm() {
       {showDeleteModal && (
         <div>
           <p>Are you sure you want to delete this address?</p>
-          <Button className="custom-btn-primary" onClick={handleConfirmDelete}>
+          <Button className="edit-profile-button" onClick={handleConfirmDelete}>
             Confirm
           </Button>
-          <Button className="custom-btn-primary" onClick={handleCancelDelete}>
+          <Button className="edit-profile-button" onClick={handleCancelDelete}>
             Cancel
           </Button>
         </div>
       )}
+      <h3 className="title-placement">
+            <Button onClick={handleAddAddress} className="edit-profile-button">
+              Change Addresses
+            </Button>
+          </h3>
       {showAddAddressForm && (
         <Row>
           <Formik
@@ -211,7 +218,7 @@ function AddressForm() {
                   controlId="address_1"
                   className="address-form-input"
                 >
-                  <Form.Label>Address </Form.Label>
+                  <Form.Label className="smMT">Address </Form.Label>
                   <Field type="text" name="address_1" as={Form.Control} />
                   <ErrorMessage
                     name="address_1"
@@ -336,10 +343,13 @@ function AddressForm() {
 
                 <Button
                   type="submit"
-                  className="custom-btn-primary address-form-button"
+                  className="edit-profile-button smMT"
                 >
-                  Add Address
+                  Submit
                 </Button>
+                <Button onClick={handleAddAddress} className="edit-profile-button smMT">
+              Cancel
+            </Button>
               </Form>
             )}
           </Formik>

@@ -9,6 +9,13 @@
   --onyx:  #31343C;
 }
 
+/* html, body {
+  background-color: var(--footer-color);
+  background-size: cover;
+} */
+
+
+
 .dark-mode {
   background-color: black;
   color: var(--cream-background);
@@ -21,6 +28,11 @@
 
 .form-group {
   margin-bottom: 20px;
+}
+
+.text-center {
+  text-align: center;
+  align-items: center;
 }
 
 .footer-footer {
@@ -173,7 +185,6 @@
 
 .product-margining {
   margin: 50px;
-  /* padding-bottom: 20px; */
 }
 
 
@@ -185,6 +196,120 @@
   font-family: 'Pacifico', cursive;
   color: var(--logo-color)
 }
+
+
+/* User Profile */
+.review-section {
+  color: var(--cream-background);
+  width: 100%;
+  height: 30vh;
+  background-color: var(--onyx);
+  background-size: cover;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  padding-top: 20px;
+  margin-top: 20vh;
+}
+
+.profile-button {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx);
+  background-color: var(--blood-orange); 
+  padding: 10px 20px;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px  var(--logo-color);
+  margin-top: 5vh; 
+}
+
+.profile-button:hover {
+  background-color: var(--cream-background);
+  color: var(--logo-color);
+}
+
+/* find way to edit blue after effect */
+.profile-button:after {
+  background-color: var(--cream-background);
+  box-shadow: 0 5px #fff9f9;
+  color: var(--blood-orange);
+  transform: translateY(4px);
+}
+
+.user-info {
+  background-size: cover;
+  text-align: center;
+  justify-content: center;
+  padding-top: 13vh;
+  color: var(--onyx);
+  /* padding-bottom: 10vh; */
+}
+
+.order-history {
+  margin-top: 10vh;
+  background-size: cover;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+
+/* Edit Profile */
+.smMT {
+  margin-top: 1vh
+}
+
+.smMB {
+  margin-bottom: 2vh
+}
+
+.mdMT {
+  margin-top: 5vh
+}
+
+.mdMB {
+  margin-bottom: 5vh
+}
+
+.title-text {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx);
+}
+.title-placement {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+.edit-profile-button {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx);
+  background-color: var(--blood-orange); 
+  padding: 10px 20px;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px  var(--logo-color); 
+}
+
+.edit-profile-button:hover {
+  background-color: var(--cream-background);
+  color: var(--logo-color);
+}
+
+/* find way to edit blue after effect */
+.edit-profile-button:after {
+  background-color: var(--cream-background);
+  box-shadow: 0 5px #fff9f9;
+  color: var(--blood-orange);
+  transform: translateY(4px);
+}
+
+
 
 
 /* Loading screen Animation */
