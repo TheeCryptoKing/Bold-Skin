@@ -24,7 +24,7 @@ function Signup() {
     password: Yup.string().required("Password is required"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
+      .required("Password is required"),
   });
 
   const handleSubmit = (values) => {
@@ -53,9 +53,8 @@ function Signup() {
             onSubmit={handleSubmit}
           >
             <Form className="signup-form">
-              {/* <h3>Sign Up</h3> */}
               <div className="form-group">
-                <label htmlFor="name">Name:</label>
+                <label htmlFor="name" className="base-text">Name:</label>
                 <Field
                   type="text"
                   name="name"
@@ -69,7 +68,7 @@ function Signup() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="email" className="base-text">Email:</label>
                 <Field
                   type="text"
                   name="email"
@@ -83,7 +82,7 @@ function Signup() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="username">Username:</label>
+                <label htmlFor="username" className="base-text">Username:</label>
                 <Field
                   type="text"
                   name="username"
@@ -97,7 +96,7 @@ function Signup() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password" className="base-text">Password:</label>
                 <Field
                   type="password"
                   name="password"
@@ -111,12 +110,12 @@ function Signup() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password:</label>
+                <label htmlFor="confirmPassword" className="base-text">Confirm Password:</label>
                 <Field
                   type="password"
                   name="confirmPassword"
                   id="confirmPassword"
-                  className="form-control form-field"
+                  className="form-control"
                 />
                 <ErrorMessage
                   name="confirmPassword"
@@ -124,8 +123,8 @@ function Signup() {
                   className="error-message"
                 />
               </div>
-              <button type="Create Account" className="signup-button">
-                Submit
+              <button type="Create Account" className="shop-button">
+                Create Account
               </button>
             </Form>
           </Formik>

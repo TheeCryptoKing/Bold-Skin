@@ -103,7 +103,7 @@ class Login(Resource):
         if user:
             if user.authenticate(password):
                 login_user(user, remember=True)
-                return {'message': 'Login successful'}, 200
+                return user.to_dict(), 200
         return {'Error':'401 Unauthorized'}, 401
 # Working
 
@@ -203,6 +203,7 @@ class UserOrders(Resource):
                     "status": order_status,
                     "created": order.created_at.isoformat() if order.created_at else None
                 })
+            return order_history, 200
         except Exception as e:
             traceback.print_exc()
             return {"error" : "Error while fetching order history", "message": str(e)}, 500
@@ -258,10 +259,10 @@ class UserPayments(Resource):
     @login_required
     def get(self, user_id):
         try:
-            u_payments = Payment.query.filter_by(user_id=user_id).all()
-            if u_payments:
+            user_payments = Payment.query.filter_by(user_id=user_id).all()
+            if user_payments:
                 payment_info = []
-                for payment in u_payments:
+                for payment in user_payments:
                     payment_info.append({
                         "id": payment.id,
                         "card_number": payment.card_number,
@@ -368,7 +369,7 @@ class UserAddress(Resource):
                     "address_city": address.address_city,
                     "address_state": address.address_state,
                     "address_postal": address.address_postal,
-                    "address_type": address.address_type_of
+                    "address_type_of": address.address_type_of
                 }
                 address_list.append(address_info)
             return address_list, 200
@@ -383,15 +384,16 @@ class UserAddress(Resource):
             address = Address(
                 user_id=user_id,
                 address_1=data.get('address_1'),
-                # Use empty string as default
                 address_2=data.get('address_2', ''),
                 address_city=data.get('address_city'),
                 address_state=data.get('address_state'),
                 address_postal=data.get('address_postal'),
                 address_type_of=data.get('address_type_of')
             )
+            
             db.session.add(address)
             db.session.commit()
+            
             address_info = {
                 'id': address.id,
                 'address_1': address.address_1,
@@ -402,6 +404,7 @@ class UserAddress(Resource):
                 'address_type_of': address.address_type_of
             }
             return address_info, 201
+        
         except Exception as e:
             traceback.print_exc()
             return {'Error': 'Error while creating User address', "message": str(e)}, 500
@@ -456,7 +459,6 @@ class Categories(Resource):
             return categories, 200
         except:
             return {"Error": "Categories not found"}, 404
-# Returning no data (must be syntax errror)
 api.add_resource(Categories, '/categories')
 
 class Products(Resource):
@@ -515,7 +517,6 @@ class Products(Resource):
                 return {"error": "Product not found"}, 404
         except Exception as e:
             return {"Error": "Failed to update product", "message": str(e)}, 500
-# products only working with only max recursion otherwise
 api.add_resource(Products, '/products')
 
 
@@ -544,7 +545,6 @@ class ProductByCategory(Resource):
             return products_data, 200
         except:
             return {"Error": "Products not found for the specified category"}, 404
-# works with only, without  1,3,5 Max recurison error 
 api.add_resource(ProductByCategory, '/products/category/<int:category_id>')
 
 class ProductById(Resource):
@@ -570,7 +570,6 @@ class ProductById(Resource):
                 ), 200
         except Exception as e:
             return {"Error": "Failed to retrieve product", "message": str(e)}, 500
-# Working with only
 api.add_resource(ProductById, '/products/<int:id>')
 
 class Carts(Resource):
@@ -583,6 +582,8 @@ class Carts(Resource):
                     'item_id': item.id,
                     'product_id': item.product_id,
                     'product_name': item.product.name,
+                    'product_image': item.product.image_1,
+                    'product_price': item.product.price,
                     'quantity': item.quantity
                     # 'product_quantity': item.cart_quantity
                 }
@@ -748,8 +749,9 @@ class Checkout(Resource):
 # 
 # 
 api.add_resource(Checkout, '/checkout')
-
 # Working
+
+
 
 
 ##################### Review Routes (After MVP)#########################

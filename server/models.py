@@ -256,7 +256,7 @@ class Payment(db.Model, SerializerMixin):
     ####################### DateTime Specfics
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     ####################### FK
-    user_id = db.Column("User",db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ####################### Relationships
     user = db.relationship("User", back_populates='payments')
     ######################## Validation & Serialization
@@ -276,20 +276,20 @@ class Payment(db.Model, SerializerMixin):
             raise ValueError("Cardholder name required.")
         return cardholder_name
 
-    # @validates('expiration_month')
-    # def validate_expiration_month(self, key, expiration_month):
-    #     if expiration_month < 1 or expiration_month > 12:
-    #         raise ValueError("Invalid expiration month.")
-    #     return expiration_month
-    # Fix logic
+    @validates('expiration_month')
+    def validate_expiration_month(self, key, expiration_month):
+        if expiration_month < 1 or expiration_month > 12:
+            raise ValueError("Invalid expiration month.")
+        return expiration_month
+    # Fix logic for backend
 
-    # @validates('expiration_year')
-    # def validate_expiration_year(self, key, expiration_year):
-    #     current_year = datetime.now().year
-    #     if expiration_year < current_year or expiration_year > (current_year + 10):
-    #         raise ValueError("Invalid expiration year.")
-    #     return expiration_year
-    # Fix logic
+    @validates('expiration_year')
+    def validate_expiration_year(self, key, expiration_year):
+        current_year = datetime.now().year
+        if expiration_year < current_year or expiration_year > (current_year + 10):
+            raise ValueError("Invalid expiration year.")
+        return expiration_year
+    # Fix logic for backend
 
 # class Review(db.Model, SerializerMixin):
 #     __tablename__ = 'reviews'
@@ -387,7 +387,7 @@ class Address(db.Model, SerializerMixin):
     ####################### Relationships
     user = db.relationship("User", back_populates="addresses")
     ######################## Validation & Serialization
-    serialize_rules = ("-user","-user.addresses")
+    serialize_rules = ("-user",)
     @validates('address_postal')
     def validate_address_postal(self, key, address_postal):
         pattern = r'^\d{5}$'

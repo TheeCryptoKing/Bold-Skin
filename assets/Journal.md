@@ -81,6 +81,25 @@ Populated categories, products, Need to write serializers, validations, flasklog
 Starting React and Styling, Intialize footer, Header, Login, Signup and Basic Layout for all Pages <br>
 
 
+
+<!-- api.add_resource(Login, '/login')
+api.add_resource(Signup, '/signup')
+api.add_resource(CheckSession, '/check_session') -->
+<!-- api.add_resource(Users, '/users') -->
+<!-- api.add_resource(UserOrders, '/user/orders') -->
+<!-- api.add_resource(UserOrdersByID, '/user/orders/<int:order_id>')  -->
+<!-- api.add_resource(UserPayments, '/payments/<int:user_id>') -->
+<!-- api.add_resource(UserPaymentsByID, '/payments/<int:user_id>/<int:payment_id>') -->
+<!-- api.add_resource(UserAddress, '/addresses/<int:user_id>') -->
+<!-- api.add_resource(UserAddressByID, '/addresses/<int:user_id>/<int:address_id>') -->
+<!-- api.add_resource(Products, '/products') -->
+<!-- api.add_resource(ProductByCategory, '/products/category/<int:category_id>') -->
+<!-- api.add_resource(ProductById, '/products/<int:id>') -->
+<!-- api.add_resource(Carts, '/carts') -->
+<!-- api.add_resource(Checkout, '/checkout') -->
+
+
+
 <!-- ######################## Bold-Skin Product's  ######
 
 key : value pair for icons

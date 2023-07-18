@@ -36,14 +36,6 @@ function Login() {
       .catch((err) => console.error(err));
   };
 
-// on cancel page breaks will fix later
-  // const handleCancel = () => {
-  //   setShowForm(false);
-  //   navigate('/login')
-  // };
-  // if (!showForm) {
-  //   return null; 
-  // }
 
   return (
     <>
@@ -57,7 +49,7 @@ function Login() {
             <Form className="login-form">
               {/* <h3>Login</h3> */}
               <div className="form-group">
-                <label htmlFor="identifier">Username or Email:</label>
+                <label htmlFor="identifier" className="base-text">Username or Email:</label>
                 <Field
                   type="text"
                   name="identifier"
@@ -71,7 +63,7 @@ function Login() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password" className="base-text">Password:</label>
                 <Field
                   type="password"
                   name="password"
@@ -84,7 +76,7 @@ function Login() {
                   className="error-message"
                 />
               </div>
-              <button type="Login" className="login-button">
+              <button type="Login" className="login-button shop-button">
                 Submit
               </button>
               {/* <button type="button" onClick={handleCancel}>
