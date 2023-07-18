@@ -3,6 +3,8 @@ import Context from "../Context";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Row, Col, Container, Carousel, Button, Image } from "react-bootstrap";
+import LoadingAnimation from '../LoadingAnimation'
+import Accordion from 'react-bootstrap/Accordion';
 // import ReviewContainer from "../ReviewContainer.jsx";
 // import ReviewForm from "../ReviewForm.jsx";
 
@@ -37,7 +39,7 @@ function Product() {
 //       });
 //   }, [id]);
 
-// grap image data for products
+// grab image data for products
     useEffect(() => {
         if (product) {
         const { image_1, image_2, background } = product;
@@ -58,7 +60,7 @@ function Product() {
     }, [product]);
 
     if (!product) {
-        return <div className="center">Loading...</div>;
+        return <LoadingAnimation />;
     }
 
     // Determins Quantitiy in backend 
@@ -123,49 +125,52 @@ function Product() {
         <Row>
         <Col md={6}>
         {images.length > 1 ? (
-            <Carousel className="product-carousel" interval={null}>
+            <div className="product-carousel mdMT" interval={null}>
             {images.map((image, index) => (
-                <Carousel.Item key={index}>
+                <div key={index}>
                 <img
                     src={image}
                     alt={`Image ${index}`}
-                    className="carousel-image"
+                    className="product-img"
                 />
-                </Carousel.Item>
+                </div>
             ))}
-            </Carousel>
+            </div>
         ) : images.length === 1 ? (
-            <img src={images[0]} alt="Product" className="product-image" />
+            <img src={images[0]} alt="Product" className="product-img mdMT" />
         ) : null}
         </Col>
         <Col md={6}>
-        <div className="product-details">
-            <h3>{product.name}</h3>
-            <h5>${product.price}</h5>
-            <p>
-            <span className="rating">Rating: 4.6 </span>{" "}
-            |
-            <span className="total-reviews">
+        <div className=" lgMT">
+            <h3 className=" product-description">{product.name}</h3>
+            <h5 className=" product-description">${product.price}</h5>
+            <p className=" product-description">
+            <span >Rating: 4.6 </span>{" "}
+            |   
+            <span className="total-reviews">{"  "}
                 Total Reviews: 50
             </span>
             </p>
+            
             {user ? (
-            <div className="quantity-cart-buttons">
+            <div className="quantity-styling">
                 <Button
-                className="quantity-button custom-btn-primary"
+                variant="outline-danger"
+                className="quantity-button"
                 onClick={handleQuantityDecrement}
                 >
                 -
                 </Button>
-                <span className="quantity-value">{quantity}</span>
+                <h4 className="">{quantity}</h4>
                 <Button
-                className="quantity-button custom-btn-primary"
+                variant="danger"
+                className="quantity-button"
                 onClick={handleQuantityIncrement}
                 >
                 +
                 </Button>
                 <Button
-                className=""
+                className="edit-profile-button"
                 onClick={addToCart}
                 >
                 Add to Cart
@@ -175,18 +180,20 @@ function Product() {
             <></>
             )}
         </div>
+        <hr />
+        <Row className=" quantity-styling justify-content-center">
+        <Col md={6}>
+            <h5 className="">Intiative:</h5>
+            <p>{product.intiative}</p>
         </Col>
-    </Row>
-    <hr />
-    <Row className="d-flex align-items-center justify-content-center">
-        <h4
+        {/* <h4
             className={
             activeSection === "details" ? "details-tag active" : "details-tag"
             }
             onClick={() => switchView("details")}
         >
             Details
-        </h4>
+        </h4> */}
         {/* <Col
         md={6}
         className="d-flex align-items-center justify-content-center"
@@ -201,8 +208,9 @@ function Product() {
         </h4>
         </Col> */}
     </Row>
+
     <hr />
-    {activeSection === "details" ? (
+    {/* {activeSection === "details" ? (
         <Row>
         <Col md={6}>
             <h5 className="details-header">Description:</h5>
@@ -219,9 +227,10 @@ function Product() {
         </Row>
     ) : (
         <Row>
+        
         <Col md={12}>
             <div className="review-container-wrapper">
-            {/* <ReviewContainer reviews={reviews} /> */}
+            <ReviewContainer reviews={reviews} />
             Review
             </div>
             <hr />
@@ -235,9 +244,33 @@ function Product() {
             )}
             </div>
         </Col>
-        {/* Review/ Comments/ section */}
+        Review/ Comments/ section
         </Row>
-        )}
+        )} */}
+        <Accordion defaultActiveKey="0" className="accordion-drip" flush>
+      <Accordion.Item eventKey="0">
+        <Accordion.Header className="accordion-font">Details</Accordion.Header>
+        <Accordion.Body>
+        <p >{product.description}</p>
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="1">
+        <Accordion.Header className="accordion-font">Ingredients</Accordion.Header>
+        <Accordion.Body>
+        <p>{product.ingredients}</p>
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="2">
+        <Accordion.Header className="accordion-font">Storage/Upkeep</Accordion.Header>
+        <Accordion.Body>
+        <p>{product.storage}</p>
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+        </Col>
+    </Row>
+    <hr />
+
         </Container>
 );
 }

@@ -11,6 +11,8 @@ function ProductCard({ products, searchQuery }) {
     const paginationRange = 2;
     const [quantities, setQuantities] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    // const [cardAnimationLoaded, setCardAnimationLoaded] = useState(false);
+    const [loadedCards, setLoadedCards] = useState(0);
 
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -78,6 +80,7 @@ function ProductCard({ products, searchQuery }) {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+        setLoadedCards(0);
         window.scrollTo(0, 0);
     };
 
@@ -183,15 +186,36 @@ function ProductCard({ products, searchQuery }) {
         return paginationItems;
     };
 
+    // const handleCardAnimationLoad = () => {
+    //     setCardAnimationLoaded(true);
+    //   };
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setLoadedCards((prevCount) => prevCount + 1);
+            }, 100);
+        
+            return () => {
+            clearInterval(timer);
+            };
+        }, []);
+        
+
     return (
         <div>
-        <div className="row ">
+        <div className="row deck preload">
             {currentProducts.map((product, index) => {
             const url = `/product/${product.id}`;
             const quantity = quantities[index] || 1;
+            const isCardLoaded = loadedCards >= index + 1;
 
             return (
-                <Card className="col-sm-3 card-animation product-margining" key={product.id}>
+                <Card
+                className={`col-sm-3 card-animation product-margining card-ani-load ${
+                    isCardLoaded ? "loaded" : ""
+                }`}
+                key={product.id}
+                >
                 <Link to={url}>
                     <Card.Img src={product.image_1} className='card-img'/>
                 </Link>
@@ -208,8 +232,7 @@ function ProductCard({ products, searchQuery }) {
                     <hr />
                     {user ? (
                     <div className="d-flex justify-content-center align-items-center">
-                    
-                        {renderAddToCartButton(
+                        {renderAddToCartButton(        
                             product,
                             index)}
                     </div>

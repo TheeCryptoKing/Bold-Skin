@@ -13,6 +13,7 @@ import ProfileDetails from './Components/pages/Userprofile.jsx'
 import ProcessUser from './Components/pages/Login-Signup.jsx'
 import Context from './Components/Context.jsx'
 import EditProfile from './Components/pages/EditProfile.jsx'
+import HairGrowth from './Components/pages/HairGrowth.jsx'
 import 'bootstrap/dist/css/bootstrap.css';
 import './stylesheet/index.css'
 import LoadingAnimation from './Components/LoadingAnimation';
@@ -55,6 +56,7 @@ useEffect(() => {
             <Route path='/cart' element={<Cart />}/>
             <Route path='/checkout' element={<Checkout />}/>
             <Route path='/editprofile' element={<EditProfile/>}/>
+            <Route path='/HairGrowth' element={<HairGrowth />} />
           </Routes>
       </div>
       )}

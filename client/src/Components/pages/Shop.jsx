@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import ProductCard from "../ProductCard.jsx";
 import Context from '../Context'
+import { Link, Navigate, useNavigate} from "react-router-dom";
 import { Row, Col, Container, Button, Navbar } from "react-bootstrap";
 
 
 function Shop() {
     const { user } = useContext(Context);
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -66,11 +68,17 @@ function Shop() {
   
     const handleCategoryChange = (category) => {
       setSelectedCategory(selectedCategory === category ? "" : category);
+        if (category === "Hair Growth") {
+          return navigate("/HairGrowth")
+          }
+
     };
   
     const handlePriceRangeChange = (priceRange) => {
       setSelectedPriceRange(selectedPriceRange === priceRange ? "" : priceRange);
     };
+
+
     
 
     return (

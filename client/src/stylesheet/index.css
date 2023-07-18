@@ -93,6 +93,55 @@ textarea:focus {
 .mdMR {
   margin-right: 10px;
 } 
+/* Hair Growth page  */
+
+.hair-jumbotron {
+  width: 100%;
+  height: 60vh;
+  background-image: url('https://byaaronwallace.com/cdn/shop/articles/Twist-out-hairstyle.jpg?v=1647968044');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.hair_jimmy {
+  max-width:100%;
+  max-height: 100%;
+  object-fit: fill;
+}
+.text-center {
+  text-align: center;
+}
+
+.statistics {
+  /* margin-top: 50px; */
+  /* margin-bottom: 50px; */
+  font-family: 'Pacifico', cursive;
+  font-size: 30px;
+  text-align: center;
+  color: var(--onyx)
+}
+.yoga-text {
+  font-family: 'Pacifico', cursive;
+  font-size: 15px;
+  text-align: center;
+}
+
+.ul-text {
+  font-family: 'Pacifico', cursive;
+  font-size: 20px;
+  color: var(--onyx)
+}
+
+.pacifico-bold-white {
+  font-family: 'Pacifico', cursive;
+  font-size: 70px;
+  color: white;
+}
+
+
 
 /* Home page */
 .jumbotron {
@@ -145,6 +194,7 @@ textarea:focus {
   font-size: 70px;
   color: var(--blood-orange);
 }
+
 
 .pacifico-reg {
   font-family: 'Pacifico', cursive;
@@ -254,6 +304,57 @@ textarea:focus {
   margin: 50px;
 }
 
+
+
+/* Product by ID page */
+.product-img {
+  align-items: center;
+  justify-content: center;
+  /* max-width: 100%; */
+  width: 70vh;
+  height: 60vh;
+  padding-right: 20px
+
+}
+
+.product-description {
+  text-align: center;
+  margin-top: 30px;
+  align-items: center;
+}
+
+.quantity-styling {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-top: 30px;
+  margin-bottom: 30px
+}
+
+.quantity-button {
+  margin-right: 10px;
+  margin-left: 10px
+}
+
+.accordion-drip {
+  background-color: var(--cream-background);
+  border-color: var(--logo-color);
+  --bs-accordion-active-color: var(--logo-color);
+  --bs-accordion-active-bg: var(--cream-background);
+  --bs-accordion-btn-focus-box-shadow: 0.25rem var(--blood-orange);
+  --bs-accordion-btn-active-icon: None;
+  /* padding: 20px; */
+}
+
+.accordion-font {
+  font-family: 'Pacifico', cursive;
+  padding: 25px;
+}
+
+.lgMT {
+  margin-top: 80px
+}
 /* Cart syling */
 
 .subtotal {
@@ -310,6 +411,37 @@ textarea:focus {
   color: #fe5f55;
   border-radius: 10px;
 }
+
+
+/* card animation load */
+
+.deck {
+  display:flex;
+  flex-wrap:wrap;
+  list-style:none;
+  overflow:hidden;
+
+}
+
+.card-ani-load {
+  transform:translateX(100vw) translateY(100vh) rotate(15deg);
+  transition:all 1s ease-out;
+}
+
+.card-ani-load .content {
+  opacity:0;
+  transition:all 2s ease-out;
+}
+
+.card-ani-load.loaded {
+  opacity:1;
+  transform:translateX(0) translateY(0) rotate(0);
+}
+
+.card-ani-load.loaded .content.loaded {
+  opacity:1;
+}
+
 .card-animation {
   padding: 10px;
   border: white;
@@ -691,4 +823,29 @@ card-img:hover  {
     }
 }
 
+
+/* Animate css scroll animation */
+
+/* section{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+section .container{
+  margin: 100px;
+} */
+
+
+.reveal{
+  position: relative;
+  transform: translateY(150px);
+  opacity: 0;
+  transition: 1s all ease;
+}
+
+.reveal.active{
+  transform: translateY(0);
+  opacity: 1;
+}
 
