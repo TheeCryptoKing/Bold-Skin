@@ -165,10 +165,10 @@ function UserPaymentFrom() {
             <Card key={paymentMethod.id} className="col-sm-4">
               <Card.Body>
                 <Card.Title>{paymentMethod.cardholder_name}</Card.Title>
-                {paymentMethod.card_number && typeof paymentMethod.card_number === "string" && (
+                {paymentMethod.card_number && typeof paymentMethod.card_number === "string" || "integer" && (
                   <Card.Text>
                     Card Number ending in: ****
-                    {paymentMethod.card_number.slice(-4)}
+                    {paymentMethod.card_number.toSring()}
                   </Card.Text>
                 )}
                 <Button
@@ -186,19 +186,20 @@ function UserPaymentFrom() {
               </Card.Body>
             </Card>
           ))}
+
         </Row>
       )}
       {showDeleteModal && (
-        <div>
-          <p>Are you sure you want to delete this payment?</p>
-          <Button className="custom-btn-primary" onClick={handleConfirmDelete}>
-            Confirm
-          </Button>
-          <Button className="custom-btn-primary" onClick={handleCancelDelete}>
-            Cancel
-          </Button>
-        </div>
-      )}
+                <div>
+                  <p>Are you sure you want to delete this payment?</p>
+                  <Button className="custom-btn-primary" onClick={handleConfirmDelete}>
+                    Confirm
+                  </Button>
+                  <Button className="custom-btn-primary" onClick={handleCancelDelete}>
+                    Cancel
+                  </Button>
+                </div>
+              )}
       {showAddPaymentForm && (
         <Row>
           <Formik
@@ -298,15 +299,6 @@ function UserPaymentFrom() {
                 >
                   Add Payment
                 </Button>
-                <h3></h3>
-                {/* <Button
-                  type="submit"
-                  className="shop-button"
-                  onclick={showAddPaymentForm}
-                >
-                  Cancel
-                </Button> */}
-                <h3></h3>
               </Form>
             )}
           </Formik>

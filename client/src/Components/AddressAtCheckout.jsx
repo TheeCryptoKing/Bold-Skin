@@ -16,6 +16,10 @@ function AddressCheckout({ onNext }) {
     postal_code: Yup.string().required("Postal Code is required"),
   });
 
+  const handleAddressnRecord = () => {
+    setUseAddressOnRecord(!useAddressOnRecord)
+  }
+
   useEffect(() => {
     if (user) {
       fetch(`/api/addresses/${user.id}`)
@@ -69,7 +73,7 @@ function AddressCheckout({ onNext }) {
     <div>
       {!useAddressOnRecord && addressDetails && addressDetails.length > 0 && (
         <div>
-          <p>Would you like to use an address on record?</p>
+          <h3 className="mdMT mdMB title-text">Would you like to use an address on record?</h3>
           {addressDetails.map((address) => (
             <Card key={address.id} className="col-sm-4">
               <Card.Body>
@@ -86,13 +90,13 @@ function AddressCheckout({ onNext }) {
             </Card>
           ))}
           <Button
-            className="custom-btn-primary checkout-button use-address"
+            className="custom-btn-primary checkout-button mdMB"
             onClick={() => onNext()}
           >
             Use Address on Record
           </Button>
           <Button
-            className="custom-btn-primary checkout-button"
+            className="cart-primary checkout-button mdMB"
             onClick={() => setUseAddressOnRecord(true)}
           >
             Enter New Address
@@ -114,12 +118,12 @@ function AddressCheckout({ onNext }) {
             onSubmit={handleNext}
           >
             {({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
+              <Form onSubmit={handleSubmit} className=" mdMT">
                 <Form.Group
                   controlId="address_1"
-                  className="address-form-input"
+                  className=" mdMT"
                 >
-                  <Form.Label>Address Line 1</Form.Label>
+                  <Form.Label className=" mdMT" >Address Line 1</Form.Label>
                   <Field type="text" name="address_1" as={Form.Control} />
                   <ErrorMessage
                     name="address_1"
@@ -393,9 +397,16 @@ function AddressCheckout({ onNext }) {
 
                 <Button
                   type="submit"
-                  className="custom-btn-primary address-form-button"
+                  className="checkout-button mdMB "
                 >
                   Add Address
+                </Button>
+                <Button
+                  type="submit"
+                  className="checkout-button mdMB "
+                  onClick={handleAddressnRecord}
+                >
+                  Cancel
                 </Button>
               </Form>
             )}

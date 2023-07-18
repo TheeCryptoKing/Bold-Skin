@@ -28,7 +28,6 @@ function UserPaymentFrom() {
         })
         .then((payments) => {
           setPaymentDetails(payments);
-          console.log(payments)
         })
         .catch((error) => {
           console.error(error);
@@ -144,6 +143,12 @@ function UserPaymentFrom() {
       setShowDeleteModal(true);
     };
   
+    // const cardNumber = paymentDetails.toString()
+    // const splitInteger = (cardNumber) => {
+    //   return Array.from(String(cardNumber), Number)
+    // }
+    // console.log(splitInteger)
+
     return (
       <Container>
         {paymentDetails.length === 0 ? (
@@ -161,10 +166,11 @@ function UserPaymentFrom() {
               <Card key={paymentMethod.id} style={{ width: '30vh' }}>
                 <Card.Body>
                   <Card.Title>{paymentMethod.cardholder_name}</Card.Title>
-                  {paymentMethod.card_number && typeof paymentMethod.card_number === "string" && (
+                  {paymentMethod.card_number && typeof paymentMethod.card_number === "string" || "integer" && (
                     <Card.Subtitle>
                       Card Number ending in: ****
-                      {paymentMethod.card_number}
+                      {/* {paymentMethod.card_number.toString()} */}
+                      {/* {splitInteger} */}
                     </Card.Subtitle>
                   )}
                   <Button

@@ -3,6 +3,7 @@ import Context from "./Context";
 import { Card, Pagination, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+
 function ProductCard({ products, searchQuery }) {
     const { user } = useContext(Context);
     const [currentPage, setCurrentPage] = useState(1);

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import Context from "../Context";
-import { Container, Table, Row, Button } from "react-bootstrap";
+import { Container, Card, Table, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import LoadingAnimation from '../LoadingAnimation';
+
 
 function EditableQuantityField({ productId, quantity, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -22,15 +24,18 @@ function EditableQuantityField({ productId, quantity, onSave }) {
             value={editedQuantity}
             onChange={(e) => setEditedQuantity(e.target.value)}
           />
-          <Button className="custom-btn-primary" onClick={handleSaveClick}>
+          <Button className="shop-button" onClick={handleSaveClick}>
             Save
+          </Button>
+          <Button className="shop-button" onClick={handleSaveClick}>
+            Cancel
           </Button>
         </>
       ) : (
         <>
           {quantity}
           <Button
-            className="custom-btn-primary"
+            className="shop-button custom-cart-button"
             style={{marginLeft: '20px'}}
             onClick={() => setIsEditing(true)}
           >
@@ -46,6 +51,7 @@ function Cart() {
   const { user } = useContext(Context);
   const [cart, setCart] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [cartTotal, setCartTotal] = useState([]);
 
   useEffect(() => {
     fetch("/api/carts")
@@ -68,17 +74,19 @@ function Cart() {
     if (cart) {
       const items = cart.items.map((item) => (
         <tr key={item.item_id}>
-          <td>{item.product_name}</td>
-          <td>
+          <td className="cart-data"><img src={item.product_image} style={{ width: '7vw', height :'9vh'}}/></td>
+          <td className="cart-data">{item.product_name}</td>
+          <td className="cart-data">{item.product_price}</td>
+          <td className="cart-data">  Quantity: <br/>
             <EditableQuantityField
               productId={item.product_id}
               quantity={item.quantity}
               onSave={handleQuantityChange}
             />
           </td>
-          <td>
+          <td className="cart-data">
             <Button
-              className="custom-btn-primary"
+              className="cart-button custom-cart-button"
               onClick={() => handleRemoveItem(item.item_id)}
             >
               Remove
@@ -87,6 +95,11 @@ function Cart() {
         </tr>
       ));
       setCartItems(items);
+      const subtotal = cart.items.reduce((total, item) => {
+        return total + (item.product_price * item.quantity);
+      }, 0);
+      const roundedSubtotal = subtotal.toFixed(2);
+      setCartTotal(roundedSubtotal);
     }
   }, [cart]);
 
@@ -146,45 +159,51 @@ function Cart() {
   };
 
   if (cart === null) {
-    return <div className="center base-text">...Loading</div>;
+    return <LoadingAnimation />;
   }
 
   if (cart.length === 0) {
-    return <div className="base-text">Your cart is empty.</div>;
+    return <div className="base-text">Nothing to show here .</div>;
   }
 
   return (
-    <Container className="center">
+    <Container className="">
+    <div>
       <Row>
-        <h3>Cart</h3>
+        <h3 className="title-text mdMB mdMT"> 
+        Your Cart 
+        <span> ({cart.items.length} items)</span>
+        </h3>
+        <h5 className="title-text ">
+        Every $10 spent, you plant a Tree! How many Tree's Are you planting Today?
+        </h5>
       </Row>
       <Row>
         {cart && cart.items.length === 0 ? (
-          <p>Your cart is empty...</p>
+          <p className="cart-data">Your cart is empty...</p>
         ) : (
           <>
+            <Col >
             <Table>
-              <thead>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Quantity</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>{cartItems}</tbody>
+            <div className=" cart_section mdMB mdMT">
+            <tr >{cartItems}</tr>
+            </div>
             </Table>
-            <Row>
-              <Button
+            </Col>
+            <Col className="subtotal">
+            <h3>Subtotal: {cartTotal}</h3>
+            <Button
                 as={Link}
                 to="/checkout"
-                className="cart-button"
+                className=" cart-button"
               >
-                Checkout
+                Proceed to Secure Checkout
               </Button>
-            </Row>
+              </Col>
           </>
         )}
       </Row>
+      </div>
     </Container>
   );
 }

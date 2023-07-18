@@ -582,6 +582,8 @@ class Carts(Resource):
                     'item_id': item.id,
                     'product_id': item.product_id,
                     'product_name': item.product.name,
+                    'product_image': item.product.image_1,
+                    'product_price': item.product.price,
                     'quantity': item.quantity
                     # 'product_quantity': item.cart_quantity
                 }

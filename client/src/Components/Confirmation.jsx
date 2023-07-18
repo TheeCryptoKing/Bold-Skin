@@ -33,12 +33,12 @@ function Confirmation() {
   return (
     <Container>
       <Row>
-        <Col>
-          <h2>Confirm Order?</h2>
-          <Button variant="success" onClick={handleYes}>
+        <Col className="checkout-center mdMT mdMB">
+          <h2 className="title-text">Confirm Order?</h2>
+          <Button variant="success" className="checkout-button mdMB"onClick={handleYes}>
             Yes
           </Button>{" "}
-          <Button variant="danger" onClick={handleNo}>
+          <Button variant="danger" className="edit-profile-button" onClick={handleNo}>
             No
           </Button>
         </Col>

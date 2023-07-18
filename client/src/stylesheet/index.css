@@ -10,11 +10,56 @@
 }
 
 /* html, body {
+  min-height: 100vh;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+} */
+
+/* html, body {
   background-color: var(--footer-color);
   background-size: cover;
 } */
 
 
+
+/* included later on */
+.custom-btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--chocotonic-green);
+  --bs-btn-border-color: var(--chocotonic-green);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--chocotonic-green-hover);
+  --bs-btn-hover-border-color: var(--chocotonic-green-hover);
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--chocotonic-green-hover);
+  --bs-btn-active-border-color: var(--chocotonic-green-hover);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--chocotonic-green-hover);
+  --bs-btn-disabled-border-color: var(--chocotonic-green-hover);
+  margin-right: 10px;
+}
+
+select:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 4px var(--blood-orange) !important;
+}
+textarea:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 4px var(--blood-orange) !important;
+}
 
 .dark-mode {
   background-color: black;
@@ -45,6 +90,9 @@
 .botttom-spacing {
   margin-bottom: 20px;
 }
+.mdMR {
+  margin-right: 10px;
+} 
 
 /* Home page */
 .jumbotron {
@@ -137,6 +185,7 @@
   border: none;
   border-radius: 10px;
   box-shadow: 0 5px  var(--logo-color);
+  margin-right: 10px;
 }
 
 .shop-button:hover {
@@ -170,6 +219,7 @@
   border-radius: 10px;
   box-shadow: 0 5px  var(--logo-color);
   margin-bottom: 20px;
+  margin-right: 10px;
 }
 .cart-button:after {
   background-color: var(--cream-background);
@@ -188,6 +238,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .search {
   margin-top: 30px;
   margin-bottom: 20px;
@@ -203,6 +254,37 @@
   margin: 50px;
 }
 
+/* Cart syling */
+
+.subtotal {
+  background-color: var(--onyx);
+  text-align: center;
+  margin: 4vh;
+  padding: 60px;
+  color: var(--footer-color);
+}
+.cart-data {
+  background-color: var(--footer-color);
+  margin: 5vh;
+  padding: 30px;
+  position: relative;
+  align-items: center
+}
+.custom-cart-button{
+  position: relative;
+}
+
+@media screen and (min-width: 64em) {
+.cart_section {
+    margin: 0 0 1.25rem;
+    padding: 1.25rem;
+}
+.cart_section {
+    background: var(--cream-background);
+    margin: 1vw;
+    padding: 40px;
+}
+}
 
 
 /* Product Card */
@@ -291,8 +373,6 @@ card-img:hover  {
 } */
 
 
-
-
 .middle {
   transition: .5s ease;
   opacity: 0;
@@ -338,6 +418,58 @@ card-img:hover  {
   color: var(--logo-color)
 }
 
+/* Checkout Styling */
+.checkout-button {
+  font-family: 'Pacifico', cursive;
+  color: var(--onyx);
+  background-color: var(--cream-background); 
+  padding: 10px 20px;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px  var(--footer-color);
+  margin-top: 5vh; 
+  margin-right: 10px;
+}
+
+.checkout-button:hover {
+  background-color: var(--blood-orange);
+  color: var(--cream-background);
+}
+
+.checkout-center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+/* find way to edit blue after effect */
+.checkout-button:after {
+  background-color: var(--cream-background);
+  box-shadow: 0 5px #fff9f9;
+  color: var(--blood-orange);
+  transform: translateY(4px);
+}
+
+.checkout-cards {
+  background-color: var(--cream-background);
+  padding-right: 20px;
+  margin-right: 20px
+}
+
+.check-left-bg {
+  background-color: var(--logo-color);
+  min-height: 75vh;
+}
+
+.check-right-bg {
+  background-color: var(--footer-color);
+  min-height: 75vh;
+  /* background: 100vh; */
+}
+
+
 
 /* User Profile */
 .review-section {
@@ -365,6 +497,7 @@ card-img:hover  {
   border-radius: 10px;
   box-shadow: 0 5px  var(--logo-color);
   margin-top: 5vh; 
+  margin-right: 10px;
 }
 
 .profile-button:hover {
@@ -420,6 +553,11 @@ card-img:hover  {
   font-family: 'Pacifico', cursive;
   color: var(--onyx);
 }
+
+.title-text:hover {
+  color: var(--blood-orange);
+}
+
 .title-placement {
   margin-top: 5vh;
   margin-bottom: 5vh;
@@ -428,13 +566,15 @@ card-img:hover  {
   font-family: 'Pacifico', cursive;
   color: var(--onyx);
   background-color: var(--blood-orange); 
+  background: var(--blood-orange);
   padding: 10px 20px;
   font-size: 17px;
   cursor: pointer;
   outline: none;
   border: none;
   border-radius: 10px;
-  box-shadow: 0 5px  var(--logo-color); 
+  box-shadow: 0 5px  #c05151; 
+  margin-right: 10px;
 }
 
 .edit-profile-button:hover {

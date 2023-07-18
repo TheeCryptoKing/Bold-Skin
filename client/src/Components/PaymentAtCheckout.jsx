@@ -39,8 +39,8 @@ function PaymentCheckout({ onNext }) {
           }
         })
         .then((payments) => {
-          console.log(payments)
           setPaymentDetails(payments);
+          console.log(paymentDetails)
         })
         .catch((error) => {
           console.error(error);
@@ -49,7 +49,6 @@ function PaymentCheckout({ onNext }) {
   }, [user]);
 
   const handleNext = (values) => {
-
     fetch(`/api/payments/${user.id}`, {
       method: "POST",
       headers: {
@@ -72,36 +71,39 @@ function PaymentCheckout({ onNext }) {
       });
   };
 
+  const handleCardonRecord = () => {
+    setUseCardOnRecord(!useCardOnRecord)
+  }
   // if (!user) {
   //   return null;
   // }
 
   return (
-    <div>
+    <div className="">
       {!useCardOnRecord && paymentDetails && paymentDetails.length > 0 && (
-        <div>
-          <p>Would you like to use a card on record?</p>
+        <div  className="">
+          <h4 className="title-text mdMT mdMB" >Would you like to use a card on record?</h4>
           {paymentDetails.map((paymentMethod) => (
-            <Card key={paymentMethod.id} className="col-sm-4">
+            <Card key={paymentMethod.id} className="col-sm-4 checkout-cards" >
               <Card.Body>
                 <Card.Title>{paymentMethod.cardholder_name}</Card.Title>
-                {paymentMethod.card_number && typeof paymentMethod.card_number === "string" && (
+                {paymentMethod.card_number && typeof paymentMethod.card_number === "string" || "integer" && (
                   <Card.Text>
                     Card Number ending in: ****
-                    {paymentMethod.card_number.slice(-4)}
+                    {/* {(paymentMethod.card_number).toString()} */}
                   </Card.Text>
                 )}
               </Card.Body>
             </Card>
           ))}
           <Button
-            className="custom-btn-primary checkout-button use-card"
+            className="checkout-button mdMT mdMB mdMR"
             onClick={() => onNext()}
           >
             Use Card on Record
           </Button>
           <Button
-            className="custom-btn-primary checkout-button"
+            className="checkout-button mdMT mdMB"
             onClick={() => setUseCardOnRecord(true)}
           >
             Enter New Payment
@@ -202,7 +204,7 @@ function PaymentCheckout({ onNext }) {
 
                 <Button
                   type="submit"
-                  className="custom-btn-primary payment-form-button"
+                  className="payment-form-button"
                 >
                   Add Payment
                 </Button>
@@ -304,12 +306,18 @@ function PaymentCheckout({ onNext }) {
                     className="text-danger"
                   />
                 </Form.Group>
-
                 <Button
                   type="submit"
-                  className="custom-btn-primary payment-form-button"
+                  className="checkout-button mdMB mdMR"
                 >
                   Add Payment
+                </Button>
+                <Button
+                  type="submit"
+                  className="checkout-button mdMB"
+                  onClick={handleCardonRecord}
+                >
+                  Cancel
                 </Button>
               </Form>
             )}
