@@ -104,7 +104,7 @@ const handleLogout = () => {
             <h3>{user.name}</h3>
             <h3>{user.email}</h3>
           <p>
-              View your order history and update personal Your details.
+              View your order history and update personal details.
               Let us know any way we can assist you!
           </p>
           <Button className="edit-profile-button" onClick={handleLogout}>Logout</Button>
