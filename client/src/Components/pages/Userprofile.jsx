@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import Context from "../Context.jsx";
-import { Container, Table, Row, Col, Button } from "react-bootstrap";
-import { Link, useNavigate} from "react-router-dom";
+import { Container, Table, Row, Col, Button, Modal } from "react-bootstrap";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import AddressForm from "../addressForm.jsx";
-import UserPaymentFrom from "../paymentForm.jsx";
 
 function ProfileDetails() {
   const { user, setUser } = useContext(Context);
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [showAccountEdit, setAccountEdit] = useState(false);
+  const [showModal, setModalShow] = useState([])
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -74,17 +71,6 @@ const handleLogout = () => {
 };
 }
 
-  const handleDeleteConfirmation = () => {
-    setShowConfirmation(true);
-  };
-
-  const handleAccountEdit = () => {
-    setAccountEdit((prev) => !prev);
-  };
-
-  const handleNo = () => {
-    setShowConfirmation(false);
-  };
 
   const orderData = orders.map((order) => {
     const date = new Date(order.created);
@@ -101,7 +87,7 @@ const handleLogout = () => {
         <td>${order.order_total}</td>
         <td>{order.status}</td>
         <td>
-          <Link to={`/order/${order.order_id}`}>View Details</Link>
+          <Button className="edit-profile-button"><Link to={`/order/${order.order_id}`}>View Details</Link></Button>
         </td>
       </tr>
     );
@@ -127,100 +113,7 @@ const handleLogout = () => {
           <Button className="profile-button" onClick={handleEditProfile}>
           Edit Profile Details
           </Button>
-          {/* {showAccountEdit ? (
-            <>
-              <Formik
-                initialValues={{ email: user.email, password: "" }}
-                validationSchema={validationSchema}
-                onSubmit={(values) => {
-                  fetch("/api/users", {
-                    method: "PATCH",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      email: values.email,
-                      password: values.password,
-                    }),
-                  })
-                    .then((response) => {
-                      if (response.ok) {
-                      } else {
-                        throw new Error("Error updating email and password");
-                      }
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                    });
-                }}
-              >
-              
-                <Form>
-                  <h4>Edit Email and Password</h4>
-                  <hr />
-                  <div className="form-group">
-                    <label htmlFor="email" className="form-label">
-                      Email:
-                    </label>
-                    <Field
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="edit-form"
-                    />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="password" className="form-label">
-                      Password:
-                    </label>
-                    <Field
-                      type="password"
-                      id="password"
-                      name="password"
-                      className="edit-form"
-                    />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                  <Button type="submit" className="custom-btn-primary">
-                    Update
-                  </Button>
-                  <Button variant="danger" onClick={handleAccountEdit}>
-                    Cancel
-                  </Button>
-                </Form>
-              </Formik>
-              
-            </>
-          ) : (
-            <p>
-              Need to Provide or edit your account details?{" "}
-              <span onClick={handleAccountEdit} className="edit-click">
-                Click Here
-              </span>
-            </p>
-          )} */}
           </Col>
-        {/* </Row>
-        <Row>
-          <h4>Payment Details</h4>
-          <hr />
-          <UserPaymentFrom />
-        </Row>
-        <Row>
-          <h4>Addresses</h4>
-          <hr />
-          <AddressForm />
-        </Row>
-        <Row> */}
         <div className="order-history">
         <hr />
           <h3>Order History</h3>
@@ -248,32 +141,6 @@ const handleLogout = () => {
           </div>
         </Row>
 
-        {/* <Row className="center ">
-          <h3>Now longer a Fan of BoldSKin?</h3>
-          <hr />
-          {showConfirmation ? (
-            <>
-              <p>Are you sure you want to delete your account?</p>
-              <Button
-                className=""
-                variant="success"
-                onClick={handleYes}
-              >
-                Yes
-              </Button>
-              <Button className="" variant="danger" onClick={handleNo}>
-                No
-              </Button>
-            </>
-          ) : (
-            <Button
-              className=""
-              onClick={handleDeleteConfirmation}
-            >
-              Delete Account
-            </Button>
-          )}
-        </Row> */}
       </Container>
     <div className="review-section">
       <h3>Reviews</h3>

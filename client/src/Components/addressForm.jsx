@@ -137,42 +137,37 @@ function AddressForm() {
     <Container>
       {addressDetails && addressDetails.length === 0 ? (
         <Row>
-          <p>
-            No addresses on record. Add an address?
-            <Button onClick={handleAddAddress} className="edit-profile-button">
+          <h3 className=" title-text mdMT mdMB">
+            Add an address
+            <Button onClick={handleAddAddress} className="edit-profile-button mdML">
               Click Here
             </Button>
-          </p>
+          </h3>
         </Row>
       ) : (
         <Row>
           {addressDetails.map((address) => (
-            <Card key={address.id} className="" style={{ width: '15rem' }}>
+            <Card key={address.id} className="bg-card-color" style={{ width: '15rem' }}>
               <Card.Body>
                 <Card.Title>
                   {address.address_1}
                 </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">{address.address_2}</Card.Subtitle>
-                <Card.Text className="mb-2 text-muted">
-                <Card.Text></Card.Text>
+                <Card.Text className="mb-2 text-muted smMT ">
                   City: {address.address_city},
                   <br/> State: {address.address_state}, 
                   <br /> Zip: {address.address_postal}
                   <br />
                   Type: {address.address_type_of}
                 </Card.Text>
-                <Card.Text></Card.Text>
-                <Card.Text></Card.Text>
-                <Card.Text></Card.Text>
-                <Card.Text></Card.Text>
                 <Button
-                  className="edit-profile-button"
+                  className="edit-profile-button mdMT"
                   onClick={() => handleEditAddress(address.id)}
                 >
                   Edit
                 </Button>
                 <Button
-                  className="edit-profile-button"
+                  className="edit-profile-button mdMT"
                   onClick={() => handleDeleteAddress(address.id)}
                 >
                   Delete
@@ -180,6 +175,11 @@ function AddressForm() {
               </Card.Body>
             </Card>
           ))}
+          <h3 className="title-placement">
+            <Button onClick={handleAddAddress} className="edit-profile-button">
+              Change Addresses
+            </Button>
+          </h3>
         </Row>
       )}
       {showDeleteModal && (
@@ -193,11 +193,7 @@ function AddressForm() {
           </Button>
         </div>
       )}
-      <h3 className="title-placement">
-            <Button onClick={handleAddAddress} className="edit-profile-button">
-              Change Addresses
-            </Button>
-          </h3>
+
       {showAddAddressForm && (
         <Row>
           <Formik
