@@ -89,7 +89,7 @@ function HairGrowth() {
       <section>
       <Row className="lgMT reveal">
       <h1 className="title-text">Introducing..</h1>
-      <h1 className="title-text reveal"> Our Brand New Boil Hair Oil </h1>
+      <h1 className="title-text reveal"> Our Brand New Bold Hair Oil </h1>
       <p className="hair-jimmy reveal">
       <img src="https://raw.githubusercontent.com/TheeCryptoKing/Bold-Skin/testbranch/assets/Products/HairGrowth/Hair_Growth_Oils.png"/>
       <h3 className="statistics reveal">Formulated to be suitable for all hair types, skin types, and genders.<br/> Rosemary, Pumpkin Seed Oil, and Caffeine have been studied for their efficacy for promoting hair growth and blocking DHT which can prevent hair loss! Tea Tree and Lavender are known for their anti-bacterial and anti-inflammatory properties which can help with overall scalp health.<br/> A healthy scalp is crucial to a healthy head of hair! It can also be used to maintain a healthy head of hair! <br/> Simply massage it into your scalp and enjoy the simple pleasures of giving yourself a little head rub .</h3>

@@ -16,24 +16,14 @@ const Home = () => {
             setLoading(false);
         }, 2000);
         }, []);
-
+        
+        const signature = () => {
+          return (consol.log("Created And Syled by Kwame Browne"))
+        }
 
 
     return (
         <div>
-        {/* {isLoading ? (
-        <div className="center full-height">
-            <h1 className="loading">
-            <span class="let1">l</span>  
-            <span class="let2">o</span>  
-            <span class="let3">a</span>  
-            <span class="let4">d</span>  
-            <span class="let5">i</span>  
-            <span class="let6">n</span>  
-            <span class="let7">g</span>  
-            </h1>
-        </div>
-        ) : ( */}
           <>
             <div className="jumbotron">
               <Container>
@@ -44,6 +34,7 @@ const Home = () => {
               </Container>
             </div>
             <Container>
+            
               <div>
                 <Container>
                   <div className="center onyx-reg">
@@ -57,12 +48,16 @@ const Home = () => {
                         Shop
                       </Button>
                     </h1>
+                    
                   </div>
                 </Container>
               </div>
             </Container>
+            <div className="recycle-jumbotron">
+            <h1 className="pacifico-recycle " style={{ fontSize: '10vh', }}>There is no Planet B </h1>
+            <h2 className="pacifico-recycle" style={{ fontSize: '5vh', }}> Please join our mission to reduce plastics and our carbon footprint as a race. </h2>
+            </div>
           </>
-        {/* )} */}
       </div>
     );
   };

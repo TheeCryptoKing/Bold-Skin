@@ -145,21 +145,21 @@ function UserPaymentFrom() {
   return (
     <Container>
       {paymentDetails.length === 0 ? (
-        <Row>
-          <p>
-            No payments on record. Add a payment?{" "}
-            <span onClick={handleAddPayment} className="payment-click">
+        <Row >
+          <h6 className="mdMT mdMB">
+            No payments on record. Add a payment?
+            <Button onClick={handleAddPayment} className=" mdML ">
               Click Here
-            </span>
-          </p>
+            </Button>
+          </h6>
         </Row>
       ) : (
         <Row>
           <p>
             Add a new payment?{" "}
-            <span onClick={handleAddPayment} className="payment-click">
+            <Button onClick={handleAddPayment} className="">
               Click Here
-            </span>
+            </Button>
           </p>
           {paymentDetails.map((paymentMethod) => (
             <Card key={paymentMethod.id} className="col-sm-4">

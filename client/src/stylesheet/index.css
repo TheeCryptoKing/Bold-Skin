@@ -9,28 +9,6 @@
   --onyx:  #31343C;
 }
 
-/* html, body {
-  min-height: 100vh;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-} */
-
-/* html, body {
-  background-color: var(--footer-color);
-  background-size: cover;
-} */
-
 
 
 /* included later on */
@@ -56,10 +34,12 @@ select:focus {
   outline: none !important;
   box-shadow: 0 0 0 4px var(--blood-orange) !important;
 }
+
 textarea:focus {
   outline: none !important;
   box-shadow: 0 0 0 4px var(--blood-orange) !important;
 }
+
 
 .dark-mode {
   background-color: black;
@@ -68,6 +48,13 @@ textarea:focus {
 
 .bg-color {
   background-color: var(--cream-background);
+}
+
+.bg-card-color {
+  background-color: var(--cream-background);
+  border-color: var(--onyx);
+  border-radius: var(--onyx);
+  border-radius: 10px;
 }
 /* syntax(--logo-color) */
 
@@ -93,12 +80,20 @@ textarea:focus {
 .mdMR {
   margin-right: 10px;
 } 
+
+.lgMR {
+  margin-right: 20px;
+}
+
+.mdML {
+  margin-left: 10px
+}
 /* Hair Growth page  */
 
 .hair-jumbotron {
   width: 100%;
   height: 60vh;
-  background-image: url('https://byaaronwallace.com/cdn/shop/articles/Twist-out-hairstyle.jpg?v=1647968044');
+  background-image: url('https://images.unsplash.com/photo-1523278669709-c05da80b6a65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80');
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -156,6 +151,26 @@ textarea:focus {
   align-items: center;
 }
 
+.recycle-jumbotron {
+  width: 100%;
+  height: 60vh;
+  background-image: url('https://images.unsplash.com/photo-1495556650867-99590cea3657?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.pacifico-recycle {
+  font-family: 'Pacifico', cursive;
+  font-size: 70px;
+  color: white;
+  text-shadow: -1px 1px 2px #000,
+        1px 1px 2px #000,
+        1px -1px 0 #000,
+        -1px -1px 0 #000;
+}
 
 
 .center {
@@ -236,6 +251,8 @@ textarea:focus {
   border-radius: 10px;
   box-shadow: 0 5px  var(--logo-color);
   margin-right: 10px;
+  --bs-btn-active-bg: var(--logo-color);
+  --bs-btn-active-color: var(--cream-background);
 }
 
 .shop-button:hover {
@@ -414,13 +431,11 @@ textarea:focus {
 
 
 /* card animation load */
-
 .deck {
   display:flex;
   flex-wrap:wrap;
   list-style:none;
   overflow:hidden;
-
 }
 
 .card-ani-load {
@@ -696,6 +711,8 @@ card-img:hover  {
 }
 .edit-profile-button {
   font-family: 'Pacifico', cursive;
+  --bs-btn-active-bg: var(--logo-color);
+  --bs-btn-active-color: var(--cream-background);
   color: var(--onyx);
   background-color: var(--blood-orange); 
   background: var(--blood-orange);
@@ -841,7 +858,7 @@ section .container{
   position: relative;
   transform: translateY(150px);
   opacity: 0;
-  transition: 1s all ease;
+  transition: 1.7s all ease;
 }
 
 .reveal.active{

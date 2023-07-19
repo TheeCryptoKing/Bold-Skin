@@ -44,7 +44,6 @@ class User(db.Model, SerializerMixin, UserMixin):
     serialize_rules = (
         # '-created_at',
         # '-updated_at',
-        # '-_password_hash',
         '-orders',
         # '-role',
         '-cart',
@@ -107,7 +106,6 @@ class Product(db.Model, SerializerMixin):
     ########################## Relationships 
     # Backref = automatically adds a new attribute to the target table's model, which provides access to related objects from the source table. 
     cartItems =  db.relationship("CartItem", back_populates="product")
-    # Prod_category = db.relationship("Category", backref="products_category")
     category = db.relationship("Category", back_populates="products")
     # reviews = db.relationship("Review", back_populates="product")
     order_items = db.relationship("OrderItems", back_populates="product")

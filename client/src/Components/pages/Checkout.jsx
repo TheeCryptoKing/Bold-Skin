@@ -14,7 +14,6 @@ function Checkout() {
     console.log(currentStep)
     const handlePaymentNext = () => {
         setCurrentStep("address");
-        console.log(paymentMethod.cardholder_name, paymentMethod.card_number)
     };
     // // Passed down as props from onNext() post 
     const handleAddressNext = () => {

@@ -20,13 +20,13 @@ export default function App() {
         <MDBFooter className='text-center bg-color' color='var(--onyx)' >
         <MDBContainer className='p-4'>
             <section className='mb-4'>
-            <MDBBtn outline color="white" floating className='m-1' href='#!' role='button'>
+            {/* <MDBBtn outline color="white" floating className='m-1' href='#!' role='button'>
                 <BsFacebook fab icon='facebook-f'/>
             </MDBBtn>
 
             <MDBBtn outline color="grey" floating className='m-1' href='#!' role='button'>
                 <FaTwitter fab icon='twitter' />
-            </MDBBtn>
+            </MDBBtn> */}
 
             <MDBBtn outline color="black" floating className='m-1' href='#!' role='button'>
                 <FaGoogle fab icon='google' />
@@ -40,7 +40,7 @@ export default function App() {
                 <FaLinkedin fab icon='linkedin-in' />
             </MDBBtn>
 
-            <MDBBtn outline color="black" floating className='m-1' href='#!' role='button'>
+            <MDBBtn outline color="black" floating className='m-1' href='https://github.com/TheeCryptoKing' role='button'>
                 <FaGithub fab icon='github' />
             </MDBBtn>
             </section>
@@ -54,9 +54,7 @@ export default function App() {
 
             <section className='mb-4 bg-color'>
             <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
-                voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
-                sequi voluptate quas.
+                As you continue to Support us, We continue to Support the Planet.<br/> From everybody in the BoldSKin Family we want to say Thank You for the oppourtunity! 
             </p>
             </section>
 

@@ -153,34 +153,34 @@ function UserPaymentFrom() {
       <Container>
         {paymentDetails.length === 0 ? (
           <Row>
-            <h3>
-              No payments on record. Add a payment?
-              <span onClick={handleAddPayment} className="edit-profile-button">
+            <h3 className=" title-text mdMT mdMB">
+              Add a payment?
+              <Button onClick={handleAddPayment} className="edit-profile-button mdML">
                 Click Here
-              </span>
+              </Button>
             </h3>
           </Row>
         ) : (
           <Row>
             {paymentDetails.map((paymentMethod) => (
-              <Card key={paymentMethod.id} style={{ width: '30vh' }}>
+              <Card key={paymentMethod.id} className="bg-card-color" style={{ width: '30vh' }}>
                 <Card.Body>
                   <Card.Title>{paymentMethod.cardholder_name}</Card.Title>
                   {paymentMethod.card_number && typeof paymentMethod.card_number === "string" || "integer" && (
-                    <Card.Subtitle>
+                    <Card.Subtitle className="smMT">
                       Card Number ending in: ****
                       {/* {paymentMethod.card_number.toString()} */}
                       {/* {splitInteger} */}
                     </Card.Subtitle>
                   )}
                   <Button
-                    className="edit-profile-button"
+                    className="edit-profile-button mdMT"
                     onClick={() => handleEditPayment(paymentMethod.id)}
                   >
                     Edit
                   </Button>
                   <Button
-                    className="edit-profile-button"
+                    className="edit-profile-button mdMT"
                     onClick={() => handleDeletePayment(paymentMethod.id)}
                   >
                     Delete
@@ -334,6 +334,7 @@ function EditProfile() {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
+    // username: Yup.string().username("Invalid Username").required("Username is required"),
   });
   
   const handleDeleteConfirmation = () => {
@@ -434,6 +435,22 @@ function EditProfile() {
                       className="error-message"
                     />
                   </div>
+                  {/* <div className="form-group">
+                    <label htmlFor="username" className="form-label">
+                      Username:
+                    </label>
+                    <Field
+                      type="username"
+                      id="username"
+                      name="username"
+                      className="edit-form"
+                    />
+                    <ErrorMessage
+                      name="username"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div> */}
                   <Button type="submit" className="edit-profile-button">
                     Update
                   </Button>

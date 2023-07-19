@@ -53,7 +53,6 @@ function OrderById() {
       <tr>
         <td>{item.product_name}</td>
         <td>{item.price}</td>
-        <td>{item.quantity}</td>
       </tr>
     );
   });
@@ -64,8 +63,8 @@ function OrderById() {
 
   return (
     <Container>
-      <Row>
-        <h3>Order: {order_id}</h3> <p>Return to profile? <span onClick={backToProfile} style={{cursor:'pointer'}}><b>Click Here</b></span></p>
+      <Row className="mdMT">
+        <h3>Order: {order_id}</h3> <p><b>Return to profile?</b> <Button className="edit-profile-button"onClick={backToProfile} style={{cursor:'pointer'}}>Click Here</Button></p>
       </Row>
       <Row>
         <Table striped bordered hover>
@@ -73,13 +72,11 @@ function OrderById() {
             <tr>
               <th>Product Name</th>
               <th>Price</th>
-              <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
             {orderItems}
             <tr>
-              <td></td>
               <td></td>
               <td>Total: ${order.order_total.toFixed(2)}</td>
             </tr>
@@ -101,7 +98,7 @@ function OrderById() {
           </>
         ) : (
           <Button
-            className="custom-btn-primary cancel-order"
+            className="edit-profile-button mdMB"
             onClick={showConfirmation}
           >
             Cancel Order
