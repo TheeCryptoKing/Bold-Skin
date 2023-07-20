@@ -41,8 +41,8 @@ from models import (
     Address, 
     Product, 
     Category, 
-    # Review, 
-    # Comment, 
+    Review, 
+    Comment, 
     # Role, 
     Cart, 
     CartItem, 
@@ -755,170 +755,247 @@ api.add_resource(Checkout, '/checkout')
 
 
 ##################### Review Routes (After MVP)#########################
-# class ProductReviews(Resource):
-#     def get(self, product_id):
-#         try:
-#             reviews = Review.query.filter_by(product_id=product_id).all()
-#             review_list = []
-#             for review in reviews:
-#                 review_info = {
-#                     'review_id': review.id,
-#                     'user_id': review.user_id,
-#                     'users_name': review.user.name,
-#                     'review_rating': review.review_rating,
-#                     'review_text': review.review_text,
-#                     'created_at': review.created_at.isoformat() if review.created_at else None
-#                 }
+class ProductReviews(Resource):
+    def get(self, product_id):
+        try:
+            reviews = Review.query.filter_by(product_id=product_id).all()
+            review_list = []
+            for review in reviews:
+                review_info = {
+                    'review_id': review.id,
+                    'user_id': review.user_id,
+                    'users_name': review.user.name,
+                    'review_rating': review.review_rating,
+                    'review_text': review.review_text,
+                    'review_comments': review.comments,
+                    'created_at': review.created_at.isoformat() if review.created_at else None
+                }
 
-#                 if review.updated_at:
-#                     review_info['updated_at'] = review.updated_at.isoformat()
-#                     # sed to return a string of date, time, and UTC offset to the corresponding time zone 
+                if review.updated_at:
+                    review_info['updated_at'] = review.updated_at.isoformat()
+                    # sed to return a string of date, time, and UTC offset to the corresponding time zone 
 
-#                 review_list.append(review_info)
-#             return review_list, 200
-#         except:
-#             return {'Error': 'Error while fetching Reviews'}, 500
+                review_list.append(review_info)
+            return review_list, 200
+        except:
+            return {'Error': 'Error while fetching Reviews'}, 500
+# Working
+    @login_required
+    def post(self, product_id):
+        try:
+            user_id = current_user.id
+            data = request.get_json()
+            review_rating = int(data.get('review_rating'))
+            review_text = data.get('review_text')
 
-#     @login_required
-#     def post(self, product_id):
-#         try:
-#             user_id = current_user.id
-#             data = request.get_json()
-#             review_rating = int(data.get('review_rating'))
-#             review_text = data.get('review_text')
+            product = Product.query.filter_by(id=product_id).first()
+            if not product:
+                return {'Error': 'Product not found'}, 404
 
-#             product = Product.query.filter_by(id=product_id).first()
-#             if not product:
-#                 return {'Error': 'Product not found'}, 404
+            review = Review(
+                user_id=user_id,
+                product_id=product_id,
+                review_rating=review_rating,
+                review_text=review_text
+            )
+            db.session.add(review)
+            db.session.commit()
 
-#             review = Review(
-#                 user_id=user_id,
-#                 product_id=product_id,
-#                 review_rating=review_rating,
-#                 review_text=review_text
-#             )
-#             db.session.add(review)
-#             db.session.commit()
+            review_info = {
+                'review_id': review.id,
+                'user_id': review.user_id,
+                'users_name': review.user.name,
+                'review_rating': review.review_rating,
+                'review_text': review.review_text,
+                'created_at': review.created_at.isoformat() if review.created_at else None
+            }
 
-#             review_info = {
-#                 'review_id': review.id,
-#                 'user_id': review.user_id,
-#                 'users_name': review.user.name,
-#                 'review_rating': review.review_rating,
-#                 'review_text': review.review_text,
-#                 'created_at': review.created_at.isoformat() if review.created_at else None
-#             }
+            if review.updated_at:
+                review_info['updated_at'] = review.updated_at.isoformat()
 
-#             if review.updated_at:
-#                 review_info['updated_at'] = review.updated_at.isoformat()
+            return review_info, 201
 
-#             return review_info, 201
-
-#         except Exception as e:
-#             print(e)
-#             return {'Error': 'Error while posting review', 'message': str(e)}, 500
+        except Exception as e:
+            print(e)
+            return {'Error': 'Error while posting review', 'message': str(e)}, 500
+        # Working
         
-# class UserReview(Resource):
-#     @login_required
-#     def patch(self, review_id):
-#         try:
-#             user_id = current_user.id
-#             review = Review.query.filter_by(id=review_id, user_id=user_id).first()
-#             if review:
-#                 data = request.get_json()
-#                 review_rating = data.get('review_rating')
-#                 review_text = data.get('review_text')
+        
+class UserReview(Resource):
+    @login_required
+    def get(self, review_id):
+        try:
+            user_id = current_user.id
+            reviews = Review.query.filter_by(id=review_id, user_id=user_id).all()
+            review_data = []
+            for review in reviews:
+                review_data.append({
+                    'review_id': review.id,
+                    'user_id': review.user_id,
+                    'users_name': review.user.name,
+                    'review_rating': review.review_rating,
+                    'review_text': review.review_text,
+                    'review_comments': review.comments,
+                    'created_at': review.created_at.isoformat() if review.created_at else None
+                })
+            return review_data, 200
+        except Exception as e:
+            traceback.print_exc()
+            return {"error" : "Error while fetching order history", "message": str(e)}, 500
+    # Working
+    
+    @login_required
+    def patch(self, review_id):
+        try:
+            user_id = current_user.id
+            review = Review.query.filter_by(id=review_id, user_id=user_id).first()
+            if review:
+                data = request.get_json()
+                review_rating = data.get('review_rating')
+                review_text = data.get('review_text')
 
-#                 review.review_rating = review_rating
-#                 review.review_text = review_text
-#                 review.updated_at = datetime.datetime.now()
+                review.review_rating = review_rating
+                review.review_text = review_text
+                # review.updated_at = datetime.datetime.now()
 
-#                 db.session.commit()
+                db.session.commit()
 
-#                 review_info = {
-#                     'review_id': review.id,
-#                     'user_id': review.user_id,
-#                     'review_rating': review.review_rating,
-#                     'review_text': review.review_text,
-#                     'created_at': review.created_at.isoformat() if review.created_at else None
-#                 }
+                review_info = {
+                    'review_id': review.id,
+                    'user_id': review.user_id,
+                    'review_rating': review.review_rating,
+                    'review_text': review.review_text,
+                    'review_comments': review.comments,
+                    'created_at': review.created_at.isoformat() if review.created_at else None
+                }
 
-#             if review.updated_at:
-#                 review_info['updated_at'] = review.updated_at.isoformat()
-#                 return review_info, 200
-#             else:
-#                 return {'Error': 'Review not found'}, 404
-#         except:
-#             return {'Error': 'Error while updating review'}, 500
+            if review.updated_at:
+                review_info['updated_at'] = review.updated_at.isoformat()
+                return review_info, 200
+            else:
+                return {'Error': 'Review not found'}, 404
+        except Exception as e:
+            traceback.print_exc()
+            return {'Error': 'Error while updating review'}, 500
+# working
 
-#     @login_required
-#     def delete(self, review_id):
-#         try:
-#             user_id = current_user.id
-#             review = Review.query.filter_by(id=review_id, user_id=user_id).first()
-#             if review:
-#                 db.session.delete(review)
-#                 db.session.commit()
-#                 return {}, 204
-#             else:
-#                 return {'Error': 'Review not found'}, 404
-#         except:
-#             return {'Error': 'Error occurred while deleting review'}, 500
+    @login_required
+    def delete(self, review_id):
+        try:
+            user_id = current_user.id
+            review = Review.query.filter_by(id=review_id, user_id=user_id).first()
+            if review:
+                db.session.delete(review)
+                db.session.commit()
+                return {}, 204
+            else:
+                return {'Error': 'Review not found'}, 404
+        except:
+            return {'Error': 'Error occurred while deleting review'}, 500
+# Working
 
+class AddReviewComment(Resource):
+    @login_required
+    def post(self, review_id):
+        try:
+            data = request.get_json()
+            user_id = current_user.id
+            comments = data.get('user_comments')
+            review = Review.query.filter_by(id=review_id).first()
+            if not review:
+                return {'Error': 'Review not found'}, 404
+            
+            new_comment = Comment(
+                user_id=user_id,
+                review_id=review_id,
+                user_comment=comments
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+            
+            comment_data = {
+                'comment_id' : new_comment.id,
+                'user_id': new_comment.user_id,
+                'review_id': new_comment.review_id,
+                'user_comments': new_comment.user_comment,
+                'created_at': new_comment.created_at.isoformat() if new_comment.created_at else None
+            }
+            if new_comment.updated_at:
+                comment_data['updated_at'] = review.updated_at.isoformat()
+            return comment_data, 201
+        except Exception as e:
+            print(e)
+            return {'Error': 'Error while posting review', 'message': str(e)}, 500
+        # Working, returning new_comment does blow up server though
 
-# class AddReviewComment(Resource):
-#     @login_required
-#     def post(self, id):
-#         if current_user:
-#             data = request.get_json()
-#             user_id = current_user.id
-#             new_comment = Comment(
-#                 # user_id=user_id,
-#                 # thread_id=id,
-#                 # description=data.get("description"),
-#             )
-#             try:
-#                 db.session.add(new_comment)
-#                 db.session.commit()
-#             except:
-#                 return {"error": "problem with posting comment"}, 400
-#             return (new_comment), 201
+class DeleteUserComment(Resource):
+    @login_required
+    def get(self, comment_id):
+        try:
+            user_id = current_user.id
+            comments = Comment.query.filter_by(id=comment_id, user_id=user_id).all()
+            comment_data = []
+            for comment in comments:
+                comment_data.append({
+                    'review_id': comment.id,
+                    'user_id': comment.user_id,
+                    'user_comment': comment.user_comment,
+                    'likes' : comment.likes,
+                    'created_at': comment.created_at.isoformat() if comment.created_at else None
+                })
+            return comment_data, 200
+        except Exception as e:
+            traceback.print_exc()
+            return {"error" : "Error while fetching user comments", "message": str(e)}, 500
+        
+    @login_required
+    def delete(self, comment_id):
+        try:
+            user_id = current_user.id
+            comment = Comment.query.filter_by(id=comment_id, user_id=user_id).first()
+            if comment:
+                db.session.delete(comment)
+                db.session.commit()
+                return{}, 204
+            else: 
+                return {'Error' : 'Comment not found gang gang '}, 404
+        except:
+            return {'Error' : 'Error occured in comment deletion'}, 500
+        # working
 
-# class LikeComments(Resource):
-#     @login_required
-#     def patch(self, id):
-#         if current_user:
-#             data = request.get_json()
-#             comment = Comment.query.filter(Comment.id == id).first()
-#             total_likes = comment.likes + 1
-#             setattr(comment, "likes", total_likes)
-#             print(comment)
-#             try:
-#                 db.session.add(comment)
-#                 db.session.commit()
-#             except:
-#                 return {"error": "something went wrong with the comment"}, 400
+class LikeComments(Resource):
+    @login_required
+    def patch(self, comment_id):
+        try:
+            user_id = current_user.id
+            comment = Comment.query.filter_by(id=comment_id, user_id=user_id).first()
+            if comment:                
+                comment.likes += 1
+                db.session.commit()            
+                return {} , 201
+            else: 
+                return {'Error': 'Comment not found or does not belong to the current user'}, 404
+            
+        except Exception as e:
+            traceback.print_exc()
+            return {'Error': 'Error while updating review'}, 500
 
-#             return (comment), 201
-# class UnlikeComments(Resource):
-#     method_decorators = [login_required]
-
-#     def patch(self, id):
-#         if current_user:
-#             data = request.get_json()
-#             comment = Comment.query.filter(Comment.id == id).first()
-#             total_likes = comment.likes - 1
-#             setattr(comment, "likes", total_likes)
-#             print(comment)
-#             try:
-#                 db.session.add(comment)
-#                 db.session.commit()
-#             except:
-#                 return (
-#                     {"error": "something went wrong with the comment"}
-#                 ), 400
-
-#             return (comment), 201
+class UnlikeComments(Resource):
+    @login_required
+    def patch(self, comment_id):
+        try:
+            user_id = current_user.id
+            comment = Comment.query.filter_by(id=comment_id, user_id=user_id).first()
+            if comment:                
+                comment.likes -= 1
+                db.session.commit()            
+                return {} , 201
+            else: 
+                return {'Error': 'Comment not found or does not belong to the current user'}, 404
+            
+        except Exception as e:
+            traceback.print_exc()
+            return {'Error': 'Error while updating review'}, 500
 
 # class SearchProducts(Resource):
 #     def get(self):
@@ -937,13 +1014,14 @@ api.add_resource(Checkout, '/checkout')
 #         return {'results': results}
 
 
-# api.add_resource(ProductReviews, '/reviews/product/<product_id>')
-# api.add_resource(UserReview, '/reviews/<review_id>')
+api.add_resource(ProductReviews, '/reviews/product/<product_id>')
+api.add_resource(UserReview, '/reviews/<review_id>')
 
 
-# api.add_resource(ReviewComments, '/comments')
-# api.add_resource(LikeComments, "/like_comment/<int:id>")
-# api.add_resource(UnlikeComments, "/unlike_comment/<int:id>")
+api.add_resource(AddReviewComment, '/comments/reviews/<review_id>')
+api.add_resource(DeleteUserComment, '/comments/<comment_id>')
+api.add_resource(LikeComments, "/like_comments/<comment_id>")
+api.add_resource(UnlikeComments, "/unlike_comments/<comment_id>")
 # api.add_resource(SearchProducts, '/search')
 
 

@@ -17,7 +17,7 @@ import { BsFacebook } from "react-icons/bs";
 
 export default function App() {
     return (
-        <MDBFooter className='text-center bg-color' color='var(--onyx)' >
+        <MDBFooter className='text-center bg-color sticky-footer' color='var(--onyx)' >
         <MDBContainer className='p-4'>
             <section className='mb-4'>
             {/* <MDBBtn outline color="white" floating className='m-1' href='#!' role='button'>

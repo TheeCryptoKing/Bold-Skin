@@ -4,12 +4,15 @@ import { Container, Table, Row, Col, Button, Modal } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import OrderById from "./OrderbyId"
+
 
 function ProfileDetails() {
   const { user, setUser } = useContext(Context);
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [showModal, setModalShow] = useState([])
+  const [selectedOrder, setSelectedOrder] = useState(null); 
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -71,6 +74,18 @@ const handleLogout = () => {
 };
 }
 
+// const handleModalShow = () => {
+//   setModalShow(true);
+// };
+
+// const handleModalClose = () => {
+//   setModalShow(false);
+// };
+
+// const handleOrderClick = (order) => {
+//   setSelectedOrder(order); 
+//   handleModalShow();
+// }
 
   const orderData = orders.map((order) => {
     const date = new Date(order.created);
@@ -99,11 +114,12 @@ const handleLogout = () => {
       <Container >
         <Row className="user-info">
         <Col>
-          <h3>Welcome,</h3>
-            <h3>{user.username}</h3>
-            <h3>{user.name}</h3>
-            <h3>{user.email}</h3>
-          <p>
+          <h1>Welcome,</h1>
+            <h3>Username: {user.username}</h3>
+            <h4>Email: {user.email}</h4>
+            <h3>Name: {user.name}</h3>
+            
+          <p className="title-text">
               View your order history and update personal details.
               Let us know any way we can assist you!
           </p>
@@ -140,7 +156,26 @@ const handleLogout = () => {
           </Table>
           </div>
         </Row>
+      {/* {orders.map((order) => (
+        <div key={order.order_id}>
+          <p>Order ID: {order.order_id}</p>
+          <Button onClick={() => handleOrderClick(order)}>View Order</Button>
+        </div>
+      ))}
 
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Order Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedOrder && <OrderById order={selectedOrder} />}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
       </Container>
     <div className="review-section">
       <h3>Reviews</h3>
@@ -152,6 +187,7 @@ const handleLogout = () => {
         </Table>
         <hr />
       </div>
+
     </div>
   );
 }

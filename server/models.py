@@ -37,8 +37,8 @@ class User(db.Model, SerializerMixin, UserMixin):
     orders = db.relationship("Order", back_populates='user')
     cart = db.relationship("Cart", uselist=False, back_populates="user", cascade="all, delete-orphan")
     payments = db.relationship("Payment", back_populates='user')
-    # reviews = db.relationship("Review", back_populates='user', cascade="all, delete-orphan")
-    # comments = db.relationship("Comment", back_populates='user', cascade="all, delete-orphan")
+    reviews = db.relationship("Review", back_populates='user', cascade="all, delete-orphan")
+    comments = db.relationship("Comment", back_populates='user', cascade="all, delete-orphan")
     addresses = db.relationship("Address", back_populates='user')
     ########### Validation & Seriaization
     serialize_rules = (
@@ -49,8 +49,8 @@ class User(db.Model, SerializerMixin, UserMixin):
         '-cart',
         '-payments',
         '-addresses',
-        # '-reviews',
-        # '-comments',
+        '-reviews',
+        '-comments',
         )
     @validates('username')
     def vaidates_Uname(self, key, uname):
@@ -107,7 +107,7 @@ class Product(db.Model, SerializerMixin):
     # Backref = automatically adds a new attribute to the target table's model, which provides access to related objects from the source table. 
     cartItems =  db.relationship("CartItem", back_populates="product")
     category = db.relationship("Category", back_populates="products")
-    # reviews = db.relationship("Review", back_populates="product")
+    reviews = db.relationship("Review", back_populates="product")
     order_items = db.relationship("OrderItems", back_populates="product")
     ####################### Validation & Serialization
     serialize_rules = (
@@ -122,6 +122,7 @@ class Product(db.Model, SerializerMixin):
         '-category',
         '-category.products',
         '-category_id',
+        '-reviews'
         )
     # serialize_only = ('id','name','price','quantity','e_pitch','description','image_1','image_2','application','ingredients','storage','intiative')
 
@@ -223,7 +224,7 @@ class CartItem(db.Model, SerializerMixin):
     __tablename__ = 'cart_items'
     ######################## Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    # cart_quantity = db.Column(db.Integer)
+
     quantity = db.Column(db.Integer, nullable=False)
     ####################### DateTime Specfics
     ####################### FK
@@ -289,83 +290,57 @@ class Payment(db.Model, SerializerMixin):
         return expiration_year
     # Fix logic for backend
 
-# class Review(db.Model, SerializerMixin):
-#     __tablename__ = 'reviews'
-#     ######################## Main Attributes
-#     id = db.Column(db.Integer, primary_key=True)
-#     review_rating = db.Column(db.String, nullable=False) 
-#     review_text = db.Column(db.String, nullable=False)
-#     ####################### DateTime Specfics
-#     created_at = db.Column(db.DateTime, server_default=db.func.now())
-#     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-#     ####################### FK
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-#     ####################### Relationships
-#     user = db.relationship("User", back_populates="reviews")
-#     product = db.relationship("Product", back_populates="reviews")
-#     comments = db.relationship("Comment", back_populates='review', cascade="all, delete-orphan")
-#     ######################## Validation & Serialization
-#     @validates('review_rating')
-#     def validate_rating(self, key, rating):
-#         if not rating or rating < 0 or rating > 5:
-#             raise ValueError('Invalid rating, needs to be between 0 and 5')
-#         return rating
-    
-#     @validates('review_text')
-#     def validate_review_text(self, key, review_text):
-#         if not review_text.strip():
-#             raise ValueError('Invalid review')
-#         return review_text
-    
-#     @validates("user_id")
-#     def validate_user(self, key, user_id):
-#         if not user_id or not isinstance(user_id, int):
-#             raise ValueError("Invalid user id")
-#         return user_id
-    
-#     @validates("product_id")
-#     def validate_product(self, key, product_id):
-#         if not product_id or not isinstance(product_id, int):
-#             raise ValueError("Invalid product id")
-#         return product_id
+class Review(db.Model, SerializerMixin):
+    __tablename__ = 'reviews'
+    ######################## Main Attributes
+    id = db.Column(db.Integer, primary_key=True)
+    review_rating = db.Column(db.Integer) 
+    review_text = db.Column(db.String, nullable=False)
+    ####################### DateTime Specfics
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    ####################### FK
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    ####################### Relationships
+    user = db.relationship("User", back_populates="reviews")
+    product = db.relationship("Product", back_populates="reviews")
+    comments = db.relationship("Comment", back_populates='review', cascade="all, delete-orphan")
+    ######################## Validation & Serialization
+    serialize_rules=(
+        '-comments',
+        '-product',
+        )
+    @validates('rating')
+    def validate_rating(self, key, rating):
+        if not rating or rating < 0 or rating > 5:
+            raise ValueError(' Invalid rating value, must be between 0 and 5')
+        return rating
     
     
 
-# class Comment(db.Model, SerializerMixin):
-#     __tablename__ = 'comments'
-#     ######################## Main Attributes
-#     id = db.Column(db.Integer, nullable=False, primary_key=True)
-#     user_comment = db.Column(db.Text, nullable=True)
-#     likes = db.Column(db.Integer, default=0)
-#     ####################### DateTime Specfics
-#     created_at = db.Column(db.DateTime, server_default=db.func.now())
-#     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-#     ####################### FK
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
-#     review_id = db.Column(db.Integer, db.ForeignKey('reviews.id')) 
-#     ####################### Relationships
-#     review = db.relationship("Review", back_populates="comments")
-#     user = db.relationship("User", back_populates="comments")
-#     ######################## Validation & Serialization
-#     # serialize_rules = ('-created_at','-updated_at','',)
+class Comment(db.Model, SerializerMixin):
+    __tablename__ = 'comments'
+    ######################## Main Attributes
+    id = db.Column(db.Integer, nullable=False, primary_key=True)
+    user_comment = db.Column(db.Text, nullable=True)
+    likes = db.Column(db.Integer, default=0)
+    ####################### DateTime Specfics
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    ####################### FK
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    review_id = db.Column(db.Integer, db.ForeignKey('reviews.id')) 
+    ####################### Relationships
+    review = db.relationship("Review", back_populates="comments")
+    user = db.relationship("User", back_populates="comments")
+    ######################## Validation & Serialization
+    serialize_rules = ('-user','-reviews')
 #     @validates('user_comment')
 #     def validate_Ucomment(self, key, comment):
 #         if not comment.strip():
 #             raise ValueError('Invalid comments')
 #         return comment
-    
-#     @validates("user_id")
-#     def validate_user(self, key, user_id):
-#         if not user_id or not isinstance(user_id, int):
-#             raise ValueError("Invalid user id")
-#         return user_id
-    
-#     @validates("review_id")
-#     def validate_product(self, key, review_id):
-#         if not review_id or not isinstance(review_id, int):
-#             raise ValueError("Invalid review id")
-#         return review_id
     
     
 

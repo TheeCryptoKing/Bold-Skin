@@ -411,7 +411,7 @@ function EditProfile() {
                       type="email"
                       id="email"
                       name="email"
-                      className="edit-form"
+                      className="edit-form search"
                     />
                     <ErrorMessage
                       name="email"
@@ -421,13 +421,13 @@ function EditProfile() {
                   </div>
                   <div className="form-group">
                     <label htmlFor="password" className="form-label">
-                      Password:
+                      Password: {""}
                     </label>
                     <Field
                       type="password"
                       id="password"
                       name="password"
-                      className="edit-form"
+                      className="edit-form search"
                     />
                     <ErrorMessage
                       name="password"

@@ -86,13 +86,13 @@ function OrderById() {
           <>
             <p>Are you sure?</p>
             <Button
-              className="user-delete"
+              className="user-delete confirmation-button smMB"
               variant="success"
               onClick={handleYes}
             >
               Yes
             </Button>
-            <Button className="user-delete" variant="danger" onClick={handleNo}>
+            <Button className="user-delete confirmation-button mdMB" variant="danger" onClick={handleNo}>
               No
             </Button>
           </>

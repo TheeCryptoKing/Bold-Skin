@@ -8,7 +8,21 @@
   --footer-color: #e9e6d5;
   --onyx:  #31343C;
 }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
+body {
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
 
 /* included later on */
@@ -71,6 +85,12 @@ textarea:focus {
   background-color: var(--footer-color);
 }
 
+/* .sticky-footer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+} */
 .top-spacing {
   margin-top: 40px;
 }
@@ -740,6 +760,35 @@ card-img:hover  {
 }
 
 
+.confirmation-button {
+  font-family: 'Pacifico', cursive;
+  /* --bs-btn-active-bg: var(--logo-color); */
+  --bs-btn-active-color: var(--cream-background);
+  color: var(--onyx);
+  background-color: var(--blood-orange); 
+  background: var(--blood-orange);
+  padding: 10px 20px;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px  #c05151; 
+  margin-right: 10px;
+}
+
+.confirmation-button:hover {
+  background-color: var(--cream-background);
+  color: var(--logo-color);
+}
+
+/* find way to edit blue after effect */
+.confirmation-button:hover:after {
+  background-color: var(--cream-background);
+  box-shadow: 0 5px #fff9f9;
+  color: var(--blood-orange);
+  transform: translateY(4px);
+}
 
 
 /* Loading screen Animation */
