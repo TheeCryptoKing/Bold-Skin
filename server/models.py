@@ -294,7 +294,7 @@ class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
     ######################## Main Attributes
     id = db.Column(db.Integer, primary_key=True)
-    review_rating = db.Column(db.Integer) 
+    review_rating = db.Column(db.String) 
     review_text = db.Column(db.String, nullable=False)
     ####################### DateTime Specfics
     created_at = db.Column(db.DateTime, server_default=db.func.now())

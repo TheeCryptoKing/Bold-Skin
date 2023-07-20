@@ -785,7 +785,8 @@ class ProductReviews(Resource):
         try:
             user_id = current_user.id
             data = request.get_json()
-            review_rating = int(data.get('review_rating'))
+            # review_rating = int(data.get('review_rating')) isn't working
+            review_rating = data.get('review_rating')
             review_text = data.get('review_text')
 
             product = Product.query.filter_by(id=product_id).first()

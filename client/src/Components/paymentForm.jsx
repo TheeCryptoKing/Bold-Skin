@@ -85,6 +85,8 @@ function UserPaymentFrom() {
         .catch((error) => {
           console.error(error);
         });
+        // didn't work
+        window.location.reload()
     }
   };
 
@@ -135,6 +137,7 @@ function UserPaymentFrom() {
   const handleEditPayment = (paymentId) => {
     setSelectedPaymentId(paymentId);
     setShowAddPaymentForm(true);
+    // window.location.reload()
   };
 
   const handleDeletePayment = (paymentId) => {

@@ -167,7 +167,7 @@ function Cart() {
   }
 
   return (
-    <Container className="">
+    <Container className="no-stupid-footer">
     <div>
       <Row>
         <h3 className="title-text mdMB mdMT"> 

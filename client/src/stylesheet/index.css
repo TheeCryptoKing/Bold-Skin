@@ -24,6 +24,9 @@ body {
   min-height: 100vh;
 }
 
+.no-stupid-footer {
+  height: 100vh
+}
 
 /* included later on */
 .custom-btn-primary {
@@ -915,3 +918,34 @@ section .container{
   opacity: 1;
 }
 
+/* product reviews */
+.review-form {
+  background-color: var(--onyx);
+  color: var(--cream-background);
+}
+
+.review-font {
+  font-family: 'Pacifico', cursive;
+  color: var(--cream-background)
+}
+
+.form-edit {
+  background-color: var(--cream-background);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  border-radius: 10px;
+}
+.form-center {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-card {
+  background-color: var(--footer-color);
+  color: var(--onyx);
+}
